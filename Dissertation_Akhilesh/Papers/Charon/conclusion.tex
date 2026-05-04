@@ -1,0 +1,17 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+The expanded edge-to-HPC computing continuum enables flexible data processing under dynamic resource constraints but also raises  problems in resource management and optimization. We investigated a specific scientific use case and designed a framework for managing edge resources to meet user requirements. In the simple experiments with a proportional-derivative controller, we achieved the target requirement of processing 1,000 X-ray images per second and showcased an adaptive control using model quantization. As we implemented and tested the framework, we discovered potential opportunities for further design and adaptation for more general use in the edge-to-HPC continuum.
+
+One other possible future research direction for this work is the use of AI in the control itself. We are, in essence, building a more complex instrument by using hardware and software to combine user facilities and HPC systems, an instrument that we intend to control at run time based on a set of complex performance criteria. Both monitoring this instrument and controlling it can be augmented by using AI methods, from generating good performance signals from a collection of sensors to using reinforcement learning to learn a policy that maximizes the value extracted from operating such an instrument. As with any other learning problem, collecting good data and access to a functional environment will be critical, which are precisely some of the expected main outcomes of this prototyping.
+
+%
+% To support the transformative edge-to-HPC computing continuum, we are investigating (1) how resource on edge devices can be arbitrated dynamically to ensure the performance for experiment-critical applications while being flexible for reconfiguration, (2) how system software can help design AI@Edge applications that leverage HPC platforms to tune ML model performance, and (3) how flexible the user-agnostic system software policies can be, in order to be deployed across a wide range of use cases and hardware setups.
+
+
+% One possible priority research direction from this work could be the use of AI in the control itself: we are, in essence, building a more complex instrument by using hardware and software to combine user facilities and HPC systems---an instrument that we intend to control at run time based on a set of complex performance criteria. Both monitoring this instrument and controlling it can be augmented by using AI methods, from generating good performance signals from a collection of sensors to using reinforcement learning to learn a policy that maximizes the value extracted from operating such an instrument. As with any other learning problem, collecting good data and access to a functional environment will be critical, which are precisely some of the expected main outcomes of this prototyping.
+
+% 
+
+% Yongho: below seems redundant
+% Especially in our current study, we initially focus on the use case as a driver application that urgently needs such an infrastructure to fully utilize their next-generation X-ray beams. We expect that our efforts in prototyping an end-to-end infrastructure across the edge-to-HPC continuum can be the resulting work as paving the way for system software and adaptive resource management to become essential in creating a \textit{resilient, efficient, and integrated research infrastructure} to capture the transformative potential of the computing continuum.

@@ -1,0 +1,26 @@
+% \vspace{-0.2cm}
+\section{Problem Statement} \label{sec:Problem}
+Given an application and a compute node of a datacenter or HPC cluster, the goal is to reduce energy consumption during the application's execution while allowing little to no degradation in performance. We formulate this problem as a multiobjective optimization problem (balancing energy and performance) that we linearize by focusing on minimizing the energy delay squared product ($ED^2P$).
+%
+% Akhilesh, it might be worthwhile to add one or two citations to his sentence below
+% by reusing what we might already have in related work so that we don't increase
+% our references.
+As noted by Schone et al.~\cite{schone2014tools}, $ED^2P$ is widely used to measure performance degradation relative to the energy saved.
+%and compare results. 
+Compared with just the energy-delay product (EDP) where equal importance is given to the optimization of energy and execution time, $ED^2P$ puts extra emphasis on maximizing the performance against minimization of energy. The formula is $ED^2P = E \times ET^2 $, where $ET$ represents execution time and $E$ represents energy. Note that both $ET$ and $E$ are  available only at the end of the application execution.
+
+Referring to Figure~\ref{fig:motivation_fig}, we define the term performance per watt ($PPW$) as a measure of useful work done per unit power. For example, the $PPW$ corresponding to any operating point shown in Figure~\ref{fig:motivation_fig} is the square of the progress value per the measured power. 
+Using a progress-based reparameterization of time and applying Cauchy-Schwarz inequality, the non separable objective $E \times ET^2$ can be upper-bounded (up to a constant factor) by an additive surrogate of the form $\int\frac{P_{avg}(t)}{progress^2(t)}dt$. Consequently, minimizing $ED^2P$ is equivalent to minimizing this surrogate, which admits an online decomposition and corresponds to maximizing instantaneous $PPW$.
+%
+% This is a useful metric that is available during the application's execution. We pose the minimization of $ED^2P$ as a maximization of $PPW$ and $progress$. That is,
+% \begin{align}
+% \min \; \mathbb{E}\!\left[E \times ET^2\right]
+% &= \min \; \mathbb{E}\!\left[P_{\mathrm{avg}} \, ET^3\right] \notag \\
+% &\simeq \min \; \mathbb{E}\!\Bigg[
+% \int \frac{P_{\mathrm{avg}}(t_i)}{\mathrm{progress}^2(t_i)} \, dt
+% \Bigg]
+% \label{eq:ed2p_objective}
+% \end{align}
+%
+% where $P_{avg}$ is the average power measured during the execution time and $P_{avg}(t_i)$ denotes the power measured during the $i^{th}$ time interval. In other words the goal of the above objective is to minimize the instantaneous values for $\frac{P_{avg,t_i}}{progress^2(t_i)}$ or otherwise maximize $\frac{progress^2(t_i)}{P_{avg,t_i}}$ = $PPW(t_i){progress(t_i)}$. 
+ % Akhilesh, the last term is also a "min" but we said that min of EDP is the max of PPW. Is the last term a reciprocal of PPW? Andy, Yes. PPW is performance per watt which is progress/power.

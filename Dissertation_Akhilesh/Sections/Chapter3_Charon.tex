@@ -1,0 +1,46 @@
+
+%%% Chapter 3: Charon: An End-to-End Infrastructure for Connecting AI@Edge to HPC
+%%% Based on: "Charon: An End-to-End Infrastructure for Connecting AI@Edge to HPC" (PAISE 2025)
+%%% Authors: Yongho Kim, Seongha Park, Swann Perarnau (Argonne National Laboratory),
+%%%          Akhilesh Raj (Vanderbilt University)
+
+\chapter{Charon: An End-to-End Infrastructure for Connecting AI@Edge to HPC} \label{CH3_Charon}
+
+% Set the figure path for this chapter
+\graphicspath{{Papers/Charon/}}
+
+\section*{Abstract}
+Connecting Internet-of-things devices and edge computing to high-performance computing
+(HPC) systems introduces new challenges to capture the transformative potential of
+the computing continuum. User workflows in this edge-to-HPC continuum might require
+dynamic resource provisioning and control at the edge to take advantage of artificial
+intelligence (AI) inference at the data source (AI@Edge), real-time experiment
+steering, and model retraining through HPC systems. In this chapter we discuss
+the case of an edge-to-HPC workflow from beamline science and illustrate how
+such a workflow can benefit from resource arbitration and reconfiguration. From
+this driving example we highlight our work toward the design of a framework for
+AI@Edge resource management and demonstrate the benefits of our approach on an
+initial experiment, showcasing our ability to observe and adapt resources to meet
+a target application throughput.
+
+\input{Papers/Charon/intro}
+
+\input{Papers/Charon/usecase}
+
+\input{Papers/Charon/method}
+
+\input{Papers/Charon/result}
+
+\input{Papers/Charon/relatedwork}
+
+\input{Papers/Charon/conclusion}
+
+\subsection*{Acknowledgment}
+We thank APS scientists Changyong Park, Antonino Miceli, Tao Zhou, and others for
+invaluable inputs on their current and future workloads and workflows. Also, we
+thank Randall Berry, Scott Collis, Rajesh Sankaran, and Nicola Ferrier for
+supporting the initiation of this project. This material is based on work
+supported by the U.S. Department of Energy, Office of Science, under contract
+DE-AC02-06CH11357 and U.S. Department of Energy, Office of Science, under grant
+DOE-145-SE-PRJ1009506. Experimental results presented in this chapter were
+obtained using the Chameleon testbed supported by the National Science Foundation.

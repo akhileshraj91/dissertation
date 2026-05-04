@@ -1,0 +1,43 @@
+
+%%% Chapter 5: Offline Reinforcement-Learning-Based Power Control for
+%%%            Application-Agnostic Energy Efficiency
+%%% Based on: HPDC ACM 2025 paper
+%%% Authors: Akhilesh Raj (Vanderbilt University), Swann Perarnau,
+%%%          Solomon Bekele Abera (Argonne National Laboratory),
+%%%          Aniruddha Gokhale (Vanderbilt University)
+
+\chapter{Offline Reinforcement-Learning-Based Power Control for Application-Agnostic Energy Efficiency} \label{CH5_HPDC}
+
+% Set the figure path for this chapter
+\graphicspath{{Papers/HPDC/}}
+
+\section*{Abstract}
+As the compute intensity of modern AI/ML and high performance computing (HPC) workloads
+grows, so does their energy consumption, making energy efficiency a major
+sustainability challenge. Although substantial prior research has dealt with the
+design of more energy-efficient hardware or more efficient algorithms, not much
+work exists on improving the energy efficiency of already deployed applications.
+In this chapter, we present an offline reinforcement learning (RL) approach for
+application-agnostic power control of HPC compute nodes. The controller is trained
+from pre-collected execution traces, capturing hardware performance counter data
+alongside power consumption measurements, and is deployed without retraining on
+diverse test workloads. To the best of our knowledge, this is the first work to
+apply offline RL for dynamic power regulation in HPC/data center environments.
+We demonstrate significant energy savings while maintaining application performance
+across a range of memory-bandwidth-bound and compute-bound benchmarks.
+
+\input{Papers/HPDC/Sections/Introduction}
+
+\input{Papers/HPDC/Sections/Background}
+
+\input{Papers/HPDC/Sections/Problem}
+
+\input{Papers/HPDC/Sections/Methodology}
+
+\input{Papers/HPDC/Sections/Empirical}
+
+\input{Papers/HPDC/Sections/Related}
+
+\input{Papers/HPDC/Sections/Conclusions}
+
+\input{Papers/HPDC/Sections/Acknowledgement}

@@ -1,0 +1,69 @@
+\begin{algorithm}[t]
+\caption{Offline Preference-Aligned Q-Learning}
+\label{alg:offline_pref_qlearning}
+\begin{algorithmic}[1]
+\Require Offline dataset $\mathcal{D}=\{(s_t,a_t,r_t,s_{t+1})\}$
+\Require Progress--PCAP model $\mathcal{G}_{app}$
+\Require Learning rate $\eta$, discount $\gamma$, batch size $B$, soft update rate $\tau$
+\Ensure Trained network parameters $\theta$
+
+\State Initialize online network $Q_\theta$ and target network $Q_{\bar{\theta}} \leftarrow Q_\theta$
+
+\For{each iteration}
+    \State Sample minibatch $\{(s_i,a_i,r_i,s'_i)\}_{i=1}^B \sim \mathcal{D}$
+    
+    \State Construct state $s_i = [progress, power, IPC, STL, CMR, d]$
+    
+    \State Compute decay-aligned target progress:
+    \[
+    g_i^* = (1-\delta_i)\, g_{\max}
+    \]
+    
+    \State Map to desired PCAP:
+    \[
+    \text{PCAP}_{\text{des},i} = \mathcal{G}_{app}(g_i^*)
+    \]
+    
+    \State Construct aligned preference vector $\boldsymbol{\omega}_i$
+    
+    \State Compute target using preference-aware Bellman operator:
+    \begin{equation*}
+    (\mathcal{T}\mathbf{Q})(s,a,\boldsymbol{\omega})
+    = \mathbf{r}(s,a)
+    + \gamma \mathbb{E}_{s' \sim P(\cdot \mid s,a)} \Big[
+    \mathbf{Q}\Big(
+    s',
+    \arg\max_{a' \in \mathcal{A}}
+    \big(
+    S_c(\boldsymbol{\omega}, \mathbf{Q}(s',a',\boldsymbol{\omega}))
+    \cdot
+    \boldsymbol{\omega}^{\top} \mathbf{Q}(s',a',\boldsymbol{\omega})
+    \big),
+    \boldsymbol{\omega}
+    \Big)
+    \Big]
+    \end{equation*}
+    
+    \State Approximate expectation using sampled $s'_i$ and target network $Q_{\bar{\theta}}$
+    
+    \State Form Bellman target:
+    \[
+    y_i = (\mathcal{T}\mathbf{Q})(s_i,a_i,\boldsymbol{\omega}_i)
+    \]
+    
+    \State Update network parameters:
+    \[
+    \theta \leftarrow \theta - \eta \nabla_\theta
+    \frac{1}{B}\sum_{i=1}^B \left\|Q_\theta(s_i,a_i)-y_i\right\|^2
+    \]
+    
+    \State Soft update target network:
+    \[
+    \bar{\theta} \leftarrow \tau \theta + (1-\tau)\bar{\theta}
+    \]
+    
+\EndFor
+
+\State \Return $Q_\theta$
+\end{algorithmic}
+\end{algorithm}

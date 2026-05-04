@@ -1,0 +1,58 @@
+\documentclass[sigconf]{acmart}
+%\usepackage{threeparttable}
+\usepackage{appendix,float}
+% \usepackage{todonotes}
+\usepackage{array}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{wrapfig}
+\usepackage{titlesec}
+\usetikzlibrary{calc, positioning, arrows.meta}
+\usetikzlibrary{decorations.pathreplacing} 
+\titlespacing*{\section}{0pt}{0.5ex plus 1ex minus .2ex}{0.3ex plus .2ex}
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
+\copyrightyear{2025} 
+\acmYear{2025} 
+\setcopyright{cc}
+\setcctype{by}
+\acmConference[DESTION '25]{The 7th Workshop on Design Automation for CPS
+and IoT }{May 6--9, 2025}{Irvine, CA, USA}
+\acmBooktitle{The 7th Workshop on Design Automation for CPS and IoT
+(DESTION '25), May 6--9, 2025, Irvine, CA, USA}
+% \acmPrice{15.00}
+\acmDOI{10.1145/3722573.3727830}
+\acmISBN{979-8-4007-1604-1/2025/05}
+\makeatletter
+\renewcommand{\@authorfont}{\normalfont\large}
+\makeatother
+\begin{document}
+\title{Autonomous Cybersecurity Testbed for Operational Technology Networks}
+\input{Sections/t00Authors.tex}
+\input{Sections/t01Abstract.tex}
+\input{Sections/t00Keywords.tex}
+
+\maketitle
+\input{Sections/t02Introduction.tex}
+\input{Sections/t03Related.tex}
+% \input{Sections/t04Requirements.tex}
+\input{Sections/t05Architecture.tex}
+\balance
+\input{Sections/t06CaseStudy.tex}
+\input{Sections/t07Conclusion.tex}
+\input{Sections/t08Acks.tex}
+
+% \newpage
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{References/references}
+% \newpage
+\appendices
+\onecolumn
+% \input{Sections/t10AttackLib}
+
+\end{document}
+\endinput

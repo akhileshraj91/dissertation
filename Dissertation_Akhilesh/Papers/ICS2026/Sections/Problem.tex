@@ -1,0 +1,97 @@
+\section{Problem Statement}\label{sec:Problem}
+
+We consider an HPC application executing on a compute node where the controller selects a power-cap action (PCAP) at each control interval to balance performance and power/energy. Let $s_t$ denote the system observation at time $t$ (hardware counters + progress), and let $a_t \in \mathcal{A}$ denote the selected PCAP action.
+
+Instead of directly optimizing raw performance, we formulate the problem in a \textit{decay-driven} manner, where the objective is to control the degradation in performance relative to a nominal high-performance execution. Let $progress_{\max}$ denote the maximum achievable progress (e.g., at the highest PCAP), and define the performance decay as
+\begin{equation}
+\label{eq:decay}
+d(t_i) = \frac{progress_{\max} - progress(t_i)}{progress_{\max}}.
+\end{equation}
+
+The environment provides a two-dimensional reward vector
+\begin{equation}
+\label{eq:reward_vector}
+\mathbf{r}(t_i) =
+\left[
+\begin{array}{c}
+r_{\text{decay}}(t_i) \\
+r_{\text{energy}}(t_i)
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c}
+progress(t_i) \\
+P_{\text{avg},t_i}
+\end{array}
+\right],
+\end{equation}
+where maximizing progress corresponds to preserving performance, and minimizing $P_{\text{avg},t_i}$ corresponds to reducing power consumption.
+
+A user specifies a preference in terms of acceptable performance degradation. Let $\delta \in [0,1]$ denote the maximum tolerable decay. This formulation is more natural in HPC settings, where users typically reason in terms of allowable slowdown rather than absolute performance or abstract reward weights.
+
+The objective is to learn, from offline execution traces, a single controller that produces near Pareto-optimal power-cap decisions while respecting the user-specified decay constraint, without requiring separate controllers for different operating points.
+
+In standard preference-driven MORL, preference conditioning often relies on an interpolator that maps user preferences to regions of the Pareto front. However, constructing such interpolators requires extensive labeled data across multiple objectives and power settings, which is impractical in HPC environments.
+
+Instead, we exploit a key domain property: for a fixed application, performance (progress) is approximately monotonic with respect to PCAP. This allows us to establish a direct relationship between performance decay and power cap.
+
+Although execution time and energy are defined as integrals over the execution trajectory, they are monotonically related to instantaneous progress and power. Specifically, higher progress rates reduce execution time, while higher power increases energy consumption.
+
+Under the assumption that progress is monotonic with respect to PCAP, preferences over $(T, E)$ are consistently aligned with preferences over $(progress, P)$. Therefore, optimizing in the $progress$ - $power$ space provides a tractable surrogate for controlling the $execution\ time$ - $energy$ trade-off.
+
+For small control intervals, execution time and energy can be approximated as
+$T \approx \sum \Delta t$ and $E \approx \sum P_i \Delta t_i$, implying that
+instantaneous progress and power serve as locally proportional proxies for
+runtime and energy, respectively.
+
+Let $\mathcal{G}_{app}$ denote an application-specific mapping that captures the relationship between progress and power-cap (PCAP). This mapping is constructed from training traces by fitting a lightweight model (e.g., a polynomial) to the observed progress--PCAP relationship.
+
+Given a user-specified decay tolerance $\delta \in [0,1]$, we first define the target progress as
+\begin{equation}
+g^* = (1-\delta)\, g_{\max},
+\end{equation}
+where $g_{\max}$ denotes the maximum achievable progress under the highest PCAP setting.
+
+Using the fitted model $\mathcal{G}_{app}$, the corresponding desired power-cap is obtained as
+\begin{equation}
+\text{PCAP}_{\text{des}} = \mathcal{G}_{app}(g^*).
+\end{equation}
+Let $P^*$ denote the average power induced by $\text{PCAP}_{\text{des}}$. This defines a target operating point in the objective space:
+\begin{equation}
+\mathbf{x}^* =
+\begin{bmatrix}
+g^* \\
+P^*
+\end{bmatrix}.
+\end{equation}
+
+The aligned preference vector is then constructed to reflect this operating point:
+\begin{equation}
+\boldsymbol{\omega} \propto 
+\begin{bmatrix}
+g^* \\
+P^*
+\end{bmatrix},
+\end{equation}
+or equivalently, using a positive energy-savings formulation,
+\begin{equation}
+\boldsymbol{\omega} \propto 
+\begin{bmatrix}
+g^* \\
+ P^*
+\end{bmatrix}.
+\end{equation}
+
+This construction aligns the preference vector directly with the desired operating point induced by the decay constraint, eliminating the need for a learned preference interpolator and enabling a principled connection between user intent and system behavior.
+
+Given this alignment, action selection is performed using a preference-aware Q-function:
+\begin{equation}
+\text{score}(s',a') =
+\max\!\big(0,\cos(\boldsymbol{\omega},\mathbf{Q}(s',a'))\big)
+\cdot
+\boldsymbol{\omega}^{\top}\mathbf{Q}(s',a'),
+\end{equation}
+where $\boldsymbol{\omega}$ encodes the decay-aligned trade-off between performance and energy.
+
+Overall, this decay-driven formulation provides an interpretable and practically meaningful control objective, while enabling efficient offline learning and generalization across user-specified performance constraints.

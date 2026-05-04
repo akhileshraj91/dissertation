@@ -1,0 +1,183 @@
+  \section{Experimental Setup}
+  \label{sec:experimental_setup}
+
+  \subsection{HPC Platform and Software Stack}
+
+  All experiments are conducted on an HPC node managed by the Node Resource
+  Manager (NRM)~\cite{nrm}, which exposes a PCAP (power cap) actuator via its
+  \texttt{libnrm} client interface. Power and energy measurements are collected
+  through GEOPM sensors (\texttt{nrm.geopm.CPU\_POWER} and
+  \texttt{nrm.geopm.CPU\_ENERGY}), while microarchitectural performance counters
+  are instrumented using PAPI via \texttt{nrm-papiwrapper}. The five hardware
+  events collected are: \texttt{PAPI\_TOT\_INS}, \texttt{PAPI\_TOT\_CYC},
+  \texttt{PAPI\_L3\_TCM}, \texttt{PAPI\_L3\_TCA}, and \texttt{PAPI\_RES\_STL}.
+  Application progress is reported at runtime through the NRM progress sensor
+  (\texttt{nrm.benchmarks.progress}).
+
+  \subsection{Workloads}
+
+  The training dataset is collected from a mixed set of eight benchmarks,
+  comprising the five STREAM memory-bandwidth variants (\texttt{ones-stream-full},
+  \texttt{ones-stream-triad}, \texttt{ones-stream-add}, \texttt{ones-stream-copy},
+  \texttt{ones-stream-scale}) and three NAS Parallel Benchmark variants
+  (\textsc{EP}, \textsc{IS}, \textsc{BT}). Each STREAM benchmark operates on an
+  array of $33{,}554{,}432$ double-precision elements ($256$\,MB per array) and
+  runs for $10{,}000$ iterations. Evaluation covers all nine benchmarks, including
+  NPB-FT as an out-of-distribution test workload not present in the training set,
+  across nine fixed preference configurations.
+
+  \subsection{Offline Data Collection}
+  \label{sec:data_collection}
+
+  The training data is collected by a simple script, which runs each
+  application under NRM management and applies a randomly selected PCAP value
+  every $10$ seconds from the discrete action space
+  $\mathcal{A} = \{89, 95, 101, 107, 112, 118, 124, 130, 136, 141, 147, 153,
+  159, 165\}$\,W. Each application is executed for $10$ independent repetitions,
+  yielding a dataset of $381$ transitions after quality filtering.
+
+  At each PCAP interval $[t_1, t_2)$, a five-dimensional state vector is
+  constructed by averaging sensor readings within the interval:
+  \begin{equation}
+      \mathbf{s} = \Bigl[
+          \bar{f}_{\text{prog}},\;
+          \bar{P},\;
+          \overline{\text{IPC}},\;
+          \overline{\text{L3\_MISS\_RATE}},\;
+          \overline{\text{STL\_CYC}}
+      \Bigr]^{\top} \in \mathbb{R}^{5},
+  \end{equation}
+  where $\bar{f}_{\text{prog}}$ is the median progress rate, $\bar{P}$ is mean
+  measured power, $\overline{\text{IPC}} = \texttt{TOT\_INS}/\texttt{TOT\_CYC}$,
+  $\overline{\text{L3\_MISS\_RATE}} = \texttt{L3\_TCM}/\texttt{L3\_TCA}$, and
+  $\overline{\text{STL\_CYC}} = \texttt{RES\_STL}/\texttt{TOT\_CYC}$.
+
+  The two-objective reward vector for a transition $(s, a, s')$ is:
+  \begin{equation}
+      \mathbf{r} = \bigl[r_{\text{pow}},\; r_{\text{prog}}\bigr]^{\top},
+  \end{equation}
+  where each component is normalized to $[-1, +1]$:
+  \begin{align}
+      r_{\text{pow}}  &= -\!\left(2\,\frac{P - P_{\min}}{P_{\max} - P_{\min}} - 1\right),
+      \quad\text{(low power} \Rightarrow +1\text{)} \\
+      r_{\text{prog}} &= \phantom{-}\left(2\,\frac{f'_{\text{prog}}}{f_{\text{prog}}^{\max}} - 1\right),
+      \quad\text{(high progress} \Rightarrow +1\text{)}
+  \end{align}
+  with $P_{\min}$, $P_{\max}$, and $f_{\text{prog}}^{\max}$ computed per
+  application from the assembled dataset. The dataset columns are summarized in
+  Table~\ref{tab:dataset}.
+
+  \begin{table}[h]
+  \centering
+  \caption{Training dataset structure ($381$ transitions, $5$ applications).}
+  \label{tab:dataset}
+  \begin{tabular}{llc}
+  \toprule
+  \textbf{Field} & \textbf{Description} & \textbf{Range} \\
+  \midrule
+  App            & Application identifier        & 5 classes \\
+  Progress       & $\bar{f}_{\text{prog}}$       & $[0,\,300]$ \\
+  Power          & $\bar{P}$\,(W)                & $[0,\,165]$ \\
+  IPC            & Instructions per cycle        & $[0,\,1]$   \\
+  L3 miss rate   & L3 TCM / L3 TCA              & $[0,\,1]$   \\
+  Stall ratio    & RES\_STL / TOT\_CYC           & $[0,\,1]$   \\
+  Action         & PCAP\,(W)                     & $\mathcal{A}$, $|\mathcal{A}|=14$ \\
+  Reward         & $[r_{\text{pow}},\,r_{\text{prog}}]$ & $[-1,+1]^2$ \\
+  Next state     & $\mathbf{s}'$ (same fields)   & as above \\
+  \bottomrule
+  \end{tabular}
+  \end{table}
+
+  \subsection{Decay-Driven Preference}
+  \label{sec:preference}
+
+  DDMORL uses a time-varying preference vector that decays from power-focused to
+  progress-focused as the application nears completion:
+  \begin{equation}
+      \boldsymbol{\omega}(t) = \Bigl[1 - \phi(t),\; \phi(t)\Bigr]^{\top},
+      \quad
+      \phi(t) = \frac{f_{\text{prog}}(t)}{f_{\text{prog}}^{\max}} \in [0, 1],
+      \label{eq:preference}
+  \end{equation}
+  where $f_{\text{prog}}(t)$ is the current progress rate. At the start of
+  execution $\phi \approx 0$ so $\boldsymbol{\omega} \approx [1, 0]^{\top}$
+  (conserve power); as the application progresses $\boldsymbol{\omega}$ shifts
+  toward $[0, 1]^{\top}$ (maximise throughput).
+
+  \subsection{Policy Network Architecture}
+  \label{sec:network}
+
+  The Q-function is represented by a fully connected network
+  $Q_\theta : \mathbb{R}^7 \to \mathbb{R}^{32}$ with architecture
+  $7 \to 50 \to 20 \to 32$, where the input concatenates the five state features
+  with the two-dimensional preference vector, and the output encodes a
+  two-objective Q-vector for each of the $16$ PCAP actions:
+  \begin{equation}
+      Q_\theta(\mathbf{s}, \boldsymbol{\omega}) \in \mathbb{R}^{A \times 2},
+      \quad A = 16.
+  \end{equation}
+
+  \subsection{Offline Training}
+  \label{sec:training}
+
+  The policy is trained via Conservative Q-Iteration (CQI) on the offline dataset.
+  At each of the $500$ outer iterations, $50$ gradient steps are taken on
+  mini-batches of size $128$ sampled uniformly from the dataset.
+
+  \noindent\textbf{Bellman backup.}
+  For each sampled transition the multi-objective Bellman target is:
+  \begin{equation}
+      \mathbf{y} = \mathbf{r} + \gamma\, Q_{\bar\theta}(\mathbf{s}', a^*),
+      \quad
+      a^* = argmax_{a}\; \underbrace{%
+          \cos\!\bigl(\boldsymbol{\omega}_{\text{perf}},\,
+                       Q_{\bar\theta}(\mathbf{s}',a)\bigr)}_{\text{alignment}}
+      \cdot
+      \underbrace{%
+          \boldsymbol{\omega}^{\top} Q_{\bar\theta}(\mathbf{s}',a)}_{\text{magnitude}},
+      \label{eq:backup}
+  \end{equation}
+  where $\boldsymbol{\omega}_{\text{perf}}$ is the preference vector projected
+  onto the performance--power trade-off curve via a per-application polynomial
+  model, and $\gamma = 0.9$.
+
+  \noindent\textbf{Training objective.}
+  The network is updated by minimising:
+  \begin{equation}
+      \mathcal{L}(\theta) = \underbrace{%
+          \mathcal{L}_{\text{Huber}}\!\bigl(Q_\theta(\mathbf{s},a),\,\mathbf{y}\bigr)%
+      }_{\text{TD loss}}
+      +\;
+      \alpha_{\text{CQL}}\underbrace{%
+          \Bigl[
+              \log\!\sum_{a'} \lVert Q_\theta(\mathbf{s},a')\rVert_2
+              - \lVert Q_\theta(\mathbf{s},a)\rVert_2
+          \Bigr]%
+      }_{\text{CQL regularisation}},
+      \label{eq:loss}
+  \end{equation}
+  with $\alpha_{\text{CQL}} = 0.01$. The CQL term penalises large Q-norms for
+  out-of-dataset actions, preventing the policy from exploiting overestimated
+  values. The target network $Q_{\bar\theta}$ is updated via a soft Polyak
+  average with $\tau = 0.005$.
+
+  \noindent\textbf{Optimiser.}
+  Parameters are updated with RMSprop at an initial learning rate of
+  $\eta = 10^{-3}$, reduced by a factor of $0.5$ every $5{,}000$ gradient steps.
+
+  \subsection{Online Evaluation}
+  \label{sec:evaluation}
+
+  At deployment, \texttt{controller} runs the application under NRM
+  and invokes the trained policy every $2$ seconds. The current five-dimensional
+  state is constructed from live sensor readings, the preference vector
+  $\boldsymbol{\omega}$ is recomputed from the current progress rate via
+  Eq.~\eqref{eq:preference}, and the PCAP is set to the action selected by
+  Eq.~\eqref{eq:backup}. The evaluation action space is extended to $16$ PCAP
+  levels by adding $78$\,W and $83$\,W to the original $14$-level training space.
+
+  Each preference configuration is evaluated over $5$ independent runs of
+  \texttt{ones-stream-full}. Nine static preference values are tested, spanning
+  the power--progress trade-off from $\boldsymbol{\omega} = [0.9, 0.1]^{\top}$
+  (strongly power-saving) to $\boldsymbol{\omega} = [0.1, 0.9]^{\top}$ (strongly
+  progress-focused), for a total of $45$ evaluation runs.

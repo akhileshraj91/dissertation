@@ -1,0 +1,45 @@
+Users may request one of two types of explanations for red or blue agent actions: direct explanations (“Why does [agent] choose [action]?”) or counterfactual explanations (“Why does [agent] NOT choose [action] instead of [alternate action]?”). 
+To generate these explanations, we first apply VIPER \cite{bastani2018verifiable} to distill the agent’s policy into a simple, representative decision tree. 
+We then use this tree to produce either a SHAP-based direct explanation \cite{b3} or a counterfactual explanation \cite{b4}, depending on the user’s query.
+
+RL policies are often too large and complex for human users to understand. Extracting RL policy as a decision tree can make it simple, intuitive, and easier to interpret \cite{b2}.
+%Explanation generation begins by constructing a decision tree using the VIPER method that approximates the agent’s policy in a simple, interpretable form, since RL policies are often too large and complex for human users to understand \cite{b2}.
+The initial tree may be empty, supplied by the user, or carried over from a previous exercise.
+When the agent executes an action, we generate an abstract state that captures the context in which the action occurred. 
+The features of this abstract state are binary high-level, human-readable concepts (supplied by the user or the environment) that the agent can access when selecting actions.
+For example, we may track concepts such as activity, scan, and exploit detection on nodes in the network \cite{b5}. 
+We determine true features in the abstract state by pattern matching against the agent's low-level observation.
+
+We then add the abstract \{state, action\} pair to the training data for the decision tree and refit the tree using Gini impurity as the split criterion \cite{b6}.
+Each internal node tests whether an abstract feature is true or false and each leaf corresponds to a possible agent action. 
+Each action at a leaf is weighted by its importance, defined as the difference between its Q-value and the minimum Q-value among all available actions.
+At the end of the exercise (e.g., an episode or game), we evaluate the resulting decision tree by using its representative policy (rather than the base policy) to simulate multiple attacks or defenses on the network and averaging its environmental reward.
+If this new tree outperforms a tree trained on all prior data excluding the current episode, the new tree is retained as the representative policy.
+Otherwise, the previous tree remains as the base. 
+Repeating this update procedure after each exercise maintains an up-to-date, interpretable approximation of the underlying policy for explanation.
+
+When the agent selects an action and the user requests a direct explanation of that selection, we apply SHAP \cite{b3} to the decision tree and return all abstract features with non-zero Shapley values. Shapley values originate from cooperative game theory and quantify the contribution of each feature to a model’s prediction by averaging its marginal impact across all possible feature subsets.
+SHAP estimates each feature’s average marginal contribution on a decision by comparing the model’s prediction for the given action to a baseline prediction (the average over all actions). 
+If removing a feature substantially changes the prediction, that feature receives a large-magnitude SHAP value. 
+SHAP values are positive when a feature supports the chosen action and negative when it opposes it. 
+Users can then inspect the features that most strongly support or oppose the action, ordered by their absolute impact.
+
+\textit{Example 1: Consider the user query: “Why does the blue agent remove access from 'user3' when there was a scan detected on 'enterprise1'?” 
+The user may be puzzled about why 'user3' is targeted instead of 'enterprise1'.
+Applying SHAP to this decision yields the following normalized feature influences: scan of 'enterprise1' detected (0.655), no direct activity detected on 'enterprise0' (0.273), 'enterprise1' (0.038), 'defender' (-0.004), 'user1' (-0.007), 'user2' (-0.011), and a previous remove-action on 'user3' (-0.014).
+These values indicate that the decision to remove access from 'user3' is primarily supported by the fact that a scan has occurred on 'enterprise1' but no follow-on activity has yet been observed on 'enterprise1' or 'enterprise0'. 
+This suggests that the red agent may already have a foothold on 'user3' (or possibly 'user4').
+The action is weakly opposed by the absence of activity elsewhere in the network and by the fact that the blue agent has already tried removing access from 'user3' once before, but not strongly enough to prevent, repeating this defensive action.}
+
+If the user requests a counterfactual explanation \cite{b4} for a given action, we generate a set of alternative actions along with the agent’s rationale for not choosing them. 
+We first enumerate all other actions with non-zero Q-values that the policy could have selected and order them by Q-value. 
+For each alternative action, we use the decision tree to compute the minimal change in the abstract state required for the agent to select that action instead of the original one. 
+Concretely, we identify the closest common ancestor of the two actions in the tree and report the sequence of decision nodes that must change to reach the alternative leaf. 
+Users can then inspect the required feature changes and determine whether the agent should have taken an alternative action, either because its learned policy is flawed or because it lacked accurate state information when making the decision.
+
+\textit{Example 2: Consider the user query, “Why does the blue agent remove access from 'user3' when a scan is detected on 'enterprise1'?” 
+The user may believe that removing access for 'user3' is not the appropriate action and wants to understand possible alternative actions and when the agent would choose them. 
+In this scenario, the agent’s policy also allows the actions of restoring 'enterprise1' and removing 'enterprise1'.
+The counterfactual explanation clarifies that the agent would have restored 'enterprise1' if there had been a prior exploit on 'enterprise0'.
+The agent would have removed 'enterprise1' if there were activity on 'enterprise0' or 'user3', no activity on 'user2', no prior exploits on 'enterprise0', and no scans detected on the operational server.
+These explanations highlight that if the user believes, unlike the blue agent, that they know the location of the red agent, then a different action might be preferred.}

@@ -1,0 +1,25 @@
+Modern cyber defense operations face an unprecedented scale, velocity, and complexity of threats across enterprise networks, operational technology (OT) infrastructures, and emerging green-field digital environments. 
+Despite mature monitoring tools and extensive visibility into network topology, device states, and workflow dependencies, the growing sophistication of cyber adversaries requires a defense strategy that is both proactive and adaptive.
+Autonomous cyber-defense agents (referred to here as Blue agents) have emerged as a promising capability, offering continuous monitoring, rapid mitigation, and the ability to detect subtle anomalies unnoticed by humans.
+
+Yet, autonomous agents alone cannot ensure resilient defense. 
+They can suffer from false positives and false negatives, remain vulnerable to adversarial machine-learning attacks, and often lack the overall mission context or understanding of broader operational constraints. 
+Defensive actions taken without contextual awareness (such as isolating key OT assets or resetting mission-critical processes) may cause more harm than the attack itself.
+Meanwhile, human cyber operators (with rich contextual understanding, creativity, and ethical judgment) are still constrained by cognitive limits, fatigue, and response speed. Thus, a systematic approach to Human-AI teaming can overcome these limitations faced by humans and AI agents alone.
+
+The core idea of Human-AI teaming is to leverage complementary strengths.
+AI agents provide highly scalable and automated cybersecurity, 24/7 vigilance, and sophisticated anomaly detection. Humans provide the application context, multi-domain reasoning, and strategic decision-making. 
+The teaming objective is not merely human oversight of AI, but a synergistic workflow where humans and agents continuously support, supervise, and enhance each other. 
+Roles become dynamically adjustable: humans may be \textit{in-the-loop} for high-risk events, \textit{on-the-loop} for autonomous operations requiring oversight, or \textit{out-of-the-loop} for routine low-impact anomalies.
+
+To operationalize this paradigm, we build upon existing infrastructure developed in RAMPART \cite{neema2024rampart} including: live network observations, monitoring tools, simulation and emulation environments, asynchronous agent execution, risk-scoring methodologies, and model-based network provisioning systems.
+The proposed system is a unified dashboard offering deep insights through multiple explainable methods into node states, attack trajectories, and available defensive actions.
+Additionally, each agent action is annotated with the action-specific explanations (generated
+using shapley values \cite{b3} and counterfactual explanations \cite{b4}) and
+%by the system using a probabilistic decision-tree reward scoring \cite{bastani2018verifiable}, and
+an impact on overall cybersecurity risk profile of the network \cite{neema2021model}.
+
+This allows human operators to choose to interject when risk crosses critical thresholds, when mission priorities require human judgment, or when the agent’s recommended actions present unacceptable operational tradeoffs. 
+System-level datasets of these interactions are logged for training next-generation agents, calibrating trust, and enabling transparent explainability workflows.
+
+In this paper, we present a comprehensive Human-AI teaming platform for cybersecurity. Section II reviews the related work in Human-AI teaming and explainable AI. Section III presents the teaming architecture and methods developed in this research work including: the overall system architecture, approach to generate explanations for agent actions, design of an LLM-powered interaction tool, and an intuitive dashboard for human interaction with the agent. A case study is given in Section IV to illustrate the Human-AI teaming and when and human can override the agent's action is also presented. Finally, Section V concludes and provides directions for future work. Overall, this research work provides novel implementation methods and approaches for designing a comprehensive Human-AI teaming system for cyber defense based on explainable methods.
