@@ -1,0 +1,406 @@
+
+\chapter{Conclusions} \label{CH7_Conclusions}
+
+\section{Overview}
+
+This dissertation set out to address one of the defining operational challenges of
+modern scientific computing: the growing mismatch between the energy demands of
+high-performance computing infrastructure and the efficiency of the software systems
+used to manage those demands.
+Over the preceding six chapters, the work progressed from establishing the scale and
+origin of the problem, through a series of increasingly general and flexible
+reinforcement learning solutions for node-level power management, to a final broadening
+of scope that brought energy-aware resource control to the edge-to-HPC computing
+continuum.
+Taken together, the contributions form a coherent arc: each chapter addressed a
+specific limitation of its predecessor, and the cumulative result is a set of
+complementary techniques that collectively demonstrate the viability of
+learning-based, adaptive power management across diverse HPC and scientific computing
+environments.
+
+The following sections revisit each chapter in turn, articulating what was contributed,
+what was demonstrated quantitatively, and how each piece connects to the others.
+The chapter closes with a synthesis of cross-cutting themes and a discussion of the
+broader implications and future directions opened by this body of work.
+
+\section{Background and Motivation}
+
+Chapter~\ref{CH1_Introduction} established the scale and urgency of the energy problem
+in AI and data center infrastructure.
+Global data centers consumed approximately 415~TWh of electricity in 2024, a figure
+comparable to the entire annual consumption of France and projected to nearly double to
+945~TWh by 2030 as AI-specific server capacity expands at roughly 30\% per year.
+At the level of a single model, training GPT-3 required 1,287~MWh in a single run,
+equivalent to 552 metric tons of CO$_2$ equivalent, and inference costs have made
+operational energy the dominant concern at deployment scale: a single ChatGPT query
+consumes approximately 7.5 times the energy of a conventional web search.
+These figures grounded the case that energy efficiency in data centers is a matter of
+global resource allocation, not merely an operational convenience.
+
+Tracing this demand inward to the compute node, the chapter identified the fundamental
+source of temporal and spatial unevenness in power consumption: the two-order-of-magnitude
+latency gap between processor registers and main memory, the SRAM-DRAM technology
+mismatch, NUMA asymmetry in multi-socket configurations, and cache coherence overhead
+across cores.
+The result is that static power budgets are inherently inefficient, motivating the
+need for adaptive, runtime power management that responds to the instantaneous behavior
+of the executing workload.
+Reinforcement learning was introduced as the appropriate framework for designing such a
+controller: an RL agent can learn the non-linear relationship between power cap and
+application performance through interaction, without requiring either a hand-coded model
+of the processor or prior characterization of the specific workload.
+
+Chapter~\ref{CH2_LiteratureReview} provided the theoretical and technical foundations
+for the work that followed.
+The chapter surveyed the physical origins of the power wall in the breakdown of
+Dennard scaling, the energy-aware scheduling theory that provides offline-optimal
+baselines through algorithms such as YDS, the hardware actuators available to software
+(principally Intel RAPL for CPU power capping and DVFS for frequency scaling), and the
+landscape of control and learning strategies proposed in the prior literature, from
+classical PID controllers to model-free deep RL.
+A critical observation drawn from the survey is that hardware-centric and
+application-specific power management approaches each address only half the problem:
+the former optimizes at the circuit level without application awareness, while the
+latter requires re-parameterization for every new application or platform.
+The gap between these two classes of approaches motivated the application-agnostic,
+hardware-agnostic design philosophy that runs through all three RL contributions in
+this dissertation.
+The chapter also covered the performance metrics used to close the feedback loop in
+practice, particularly progress-rate signals derived from lightweight application
+instrumentation, and surveyed the edge computing landscape relevant to
+Chapter~\ref{CH6_Charon}.
+
+\section{Online Reinforcement Learning for Node-Level Power Management}
+
+Chapter~\ref{CH3_IC2E} presented the first reinforcement learning framework for
+dynamic, real-time power capping of HPC compute nodes, establishing the feasibility
+of RL-driven power management as an alternative to classical control methods.
+The central contribution was a model-based online RL approach in which a Proximal
+Policy Optimization (PPO) agent is trained on a lightweight mathematical surrogate
+model of the compute node.
+The surrogate captures the exponential relationship between the applied power cap and
+the application's instantaneous progress toward its scientific objective, derived from
+static characterization experiments on the target hardware.
+Training on the surrogate rather than on the live system eliminated the risk of
+degrading production workloads during the exploration phase of learning, a critical
+safety requirement in shared HPC environments.
+
+The controller was deployed through Intel's Running Average Power Limit (RAPL)
+interface, which exposes per-domain power capping and energy monitoring on modern
+Intel processors.
+Evaluation on an Intel Cascade Lake node running the STREAM memory-bandwidth benchmark
+demonstrated that the PPO agent achieves a 21\% reduction in energy consumption
+relative to unconstrained maximum-power execution, while incurring only a 6.5\%
+increase in execution time.
+This result was obtained with an average energy consumption of 48.23~kJ over a mean
+execution time of 261.19 seconds, representing the operating point that the agent
+identified as optimal in the energy-performance trade-off space.
+A direct comparison against a classical PI controller, the state-of-the-art method at
+the time, confirmed that the RL agent achieves a comparable Pareto-frontier position
+with the additional advantage of eliminating the need to manually specify a setpoint
+tolerance parameter.
+Repeatability experiments across seven distinct hardware configurations on Chameleon
+Cloud verified that the energy savings are consistent and not hardware-specific.
+
+The limitations of this approach were equally important to articulate.
+The surrogate model must be constructed through static characterization for each new
+hardware platform, introducing a one-time overhead that scales poorly when the
+controller is to be deployed across a heterogeneous fleet of nodes.
+Additionally, the trained policy is tied to the specific benchmark used during model
+construction, limiting generalization across the diverse portfolio of applications
+that characterize real HPC workloads.
+These limitations directly motivated the design choices of the following chapter.
+
+\section{Offline Reinforcement Learning for Application-Agnostic Energy Efficiency}
+
+Chapter~\ref{CH4_HPDC} advanced the RL framework by eliminating both the surrogate
+model requirement and the single-application constraint, producing a controller that
+is genuinely agnostic to both the hardware platform and the running application.
+The key insight was that the data needed to train an effective power management policy
+need not come from live interaction with the target system: pre-collected execution
+traces, gathered by running a set of benchmark applications at a fixed set of power
+caps, contain sufficient information to learn a general-purpose policy through offline
+RL.
+This offline formulation enabled policy development for new hardware platforms without
+requiring access to those platforms during training, a meaningful advantage for
+environments where live experimentation on production nodes is impractical.
+
+The controller was trained on a dataset of execution traces collected across multiple
+benchmark applications spanning both memory-bandwidth-bound and compute-bound
+workloads.
+At deployment, the controller observes the same lightweight performance signal used in
+Chapter~\ref{CH3_IC2E} (the application's instantaneous progress rate) and selects
+the RAPL power cap for the next control interval without any application-specific
+configuration.
+Validation across twelve benchmark applications demonstrated that the offline RL
+controller achieves an average energy saving of 20.34\% with an average performance
+degradation of only 7.4\%.
+The standard deviation of execution time across repeated runs ranged from 0.47 to
+2.91~seconds, and the standard deviation of energy consumption ranged from 0.01 to
+1.22~kJ, confirming the consistency and robustness of the learned policy.
+The controller also generalized successfully to applications not seen during training,
+including workloads with phase-varying behavior, demonstrating that the progress-rate
+signal encodes workload-agnostic microarchitectural characteristics that are predictive
+of the power-performance relationship across a broad class of scientific applications.
+
+Compared to the online approach of Chapter~\ref{CH3_IC2E}, the offline controller
+delivers nearly identical average energy savings (20.34\% versus 21\%) while removing
+the per-platform model construction step entirely.
+This equivalence in outcome, achieved without live interaction, represents a significant
+operational simplification for HPC administrators.
+The remaining limitation, however, is that the learned policy encodes a single fixed
+energy-performance trade-off, determined implicitly by the reward function used during
+training.
+In practice, different users and different computational jobs have different tolerance
+for performance degradation: a long-running simulation may tolerate a modest slowdown
+for substantial energy savings, while a time-sensitive job may require near-maximum
+performance regardless of energy cost.
+Deploying a separate RL agent for each desired operating point would negate the
+generality of the offline training approach.
+This limitation defined the research question addressed in the next chapter.
+
+\section{Decay-Driven Multi-Objective Reinforcement Learning for User-Steerable Trade-offs}
+
+Chapter~\ref{CH5_ICS} introduced the Decay-Driven Multi-Objective Reinforcement
+Learning (DDMORL) framework, which resolved the single-policy limitation of the
+previous two chapters by enabling a single offline-trained controller to cover the
+entire energy-performance trade-off surface through a user-specified preference
+parameter.
+The central technical contribution is the formulation of a preference vector
+$\boldsymbol{\omega}$ derived from a user-supplied degradation tolerance
+$\delta \in [0,1]$, where $\delta = 0$ corresponds to maximum performance preservation
+and $\delta = 1$ corresponds to maximum energy reduction.
+This scalar is converted to a preference-aligned control signal via a lightweight
+application-specific progress-to-power-cap model $\mathcal{G}_{app}$, which maps the
+desired degradation level to the range of RAPL power cap values that are likely to
+achieve it.
+At deployment, the controller selects actions using a preference-aware scoring function
+that jointly maximizes alignment with the user's specified preference and the expected
+cumulative reward estimated by the offline-trained Q-network.
+
+The DDMORL framework trains a single Q-network offline on a mixed dataset of eight
+benchmarks comprising five STREAM memory-bandwidth variants and three NAS Parallel
+Benchmark variants.
+No online exploration, no system downtime for retraining, and no enumeration of static
+power caps are required at deployment time.
+Evaluation on nine benchmarks confirmed three key properties.
+First, the preference knob $\delta$ reliably steers the controller across the full
+energy-performance trade-off surface: PCAP selection shifts monotonically from the
+high end of the action space (approximately 130 to 165~W) for $\delta \leq 0.2$ to the
+low end (approximately 89 to 107~W) for $\delta \geq 0.7$, covering all 14 discrete
+power-cap levels in the action space $\{89, 95, \ldots, 165\}$~W.
+Second, the STREAM benchmarks achieve energy savings of 31 to 39\% with well-separated
+Pareto operating points across the full 3 to 95\% degradation range, while the NPB
+benchmarks achieve 20 to 31\% savings, with operating-point clustering in the
+high-degradation regime reflecting the saturation behavior of compute-bound workloads
+at low power caps.
+Third, overlaying DDMORL operating points against static fixed-PCAP baselines in the
+execution-time versus energy plane shows that the controller's output is
+indistinguishable from that of an optimally tuned static power cap, providing empirical
+evidence that the preference inference step introduces no measurable runtime or energy
+overhead.
+
+The framework also demonstrated out-of-distribution generalization: trained on a dataset
+that held NPB-FT out entirely, the controller produced coherent and monotone Pareto
+fronts for this unseen benchmark, a result attributed to the PAPI-derived state features
+(instructions per cycle, L3 cache miss rate, and stall ratio) that encode
+workload-agnostic microarchitectural characteristics predictive of the application's
+response to power cap changes.
+This result confirms that DDMORL learns a preference-conditioned power management
+strategy rather than a workload-specific lookup table, providing a strong foundation
+for deployment in the heterogeneous multi-application environments that characterize
+production HPC facilities.
+
+Taken together, the three chapters on node-level RL form a coherent progression: from
+a model-based online controller requiring per-platform characterization (Chapter~\ref{CH3_IC2E}),
+to a model-free offline controller that is application-agnostic but single-policy
+(Chapter~\ref{CH4_HPDC}), to a model-free offline controller that is both
+application-agnostic and user-steerable across the full trade-off surface
+(Chapter~\ref{CH5_ICS}).
+Each step removed a real operational barrier to deployment without sacrificing the
+efficiency gains demonstrated by its predecessor.
+
+\section{Edge-to-HPC Resource Management for Scientific Workflows}
+
+Chapter~\ref{CH6_Charon} broadened the scope of the dissertation from per-node power
+management within a single HPC facility to dynamic resource management across the
+edge-to-HPC computing continuum.
+The motivation for this extension is that modern large-scale scientific experiments,
+particularly those in experimental physics, materials science, and high-energy
+astrophysics, generate data at rates that make end-to-end transmission to HPC centers
+impractical.
+Instead, they rely on an integrated pipeline in which data is generated at remote
+sensors or instruments, processed at the edge to reduce volume and extract features,
+and then forwarded to HPC systems for full-scale simulation and analysis.
+Managing the resources of this edge-HPC continuum under real-time scientific performance
+requirements introduces a resource arbitration problem that has no direct analogue in
+the single-node power management literature.
+
+The Charon framework, introduced in this chapter, addressed three specific research
+questions: how edge resources can be arbitrated dynamically to ensure performance for
+experiment-critical applications while remaining flexible for reconfiguration, how
+system software can support AI-at-the-edge applications that leverage connected HPC
+platforms for model tuning, and how flexible user-agnostic system software policies can
+be deployed across diverse hardware setups and use cases.
+The framework was validated on a representative scientific use case: a synchrotron
+beamline experiment requiring real-time processing of X-ray diffraction images at a
+throughput target of 1,000 images per second.
+A proportional-derivative (PD) controller was designed to arbitrate edge computational
+resources in response to the observed throughput relative to the user-specified target,
+and adaptive model quantization was used to adjust the computational cost of the
+inference pipeline at runtime.
+The experiments confirmed that the PD controller reliably achieved the 1,000 images per
+second target, and that model quantization provided a practical mechanism for managing
+the trade-off between inference accuracy and computational cost under resource constraints.
+
+The Charon results also identified a significant opportunity for future work: the
+PD controller, while effective for the specific use case studied, does not generalize
+automatically to new performance criteria or to workflows with complex multi-stage
+pipelines.
+Replacing the classical controller with a reinforcement learning agent in the control
+loop would bring to the edge-to-HPC setting the same model-free adaptivity that
+Chapters~\ref{CH3_IC2E} through~\ref{CH5_ICS} demonstrated at the node level, and
+the data collection infrastructure developed for the Charon framework provides a
+natural starting point for constructing the training environment such an agent would
+require.
+
+\section{Cross-Cutting Themes}
+
+Several themes run through all four technical contributions and are worth articulating
+explicitly, as they reflect design principles with broad applicability beyond the
+specific systems studied here.
+
+\textbf{Application-agnostic feedback signals.}
+All three node-level RL controllers rely on the application's instantaneous progress
+rate as the primary performance signal.
+This signal is defined as the rate at which the application advances toward its
+scientific objective, measured through lightweight instrumentation at pre-identified
+progress checkpoints in the application code.
+The key advantage of this signal is that it is workload-agnostic in the following sense:
+while the absolute value of the progress rate depends on the application, its
+sensitivity to changes in the power cap is predictable from microarchitectural features
+(IPC, cache miss rate, stall ratio) that are available through hardware performance
+counters.
+This means that a single trained policy can generalize across applications with
+different computational characteristics, provided the feature representation captures
+the aspects of the microarchitectural state that determine the power-performance
+relationship.
+
+\textbf{The offline RL paradigm for systems control.}
+A central methodological contribution of this dissertation is the demonstration that
+offline RL, trained on pre-collected execution traces, is sufficient for learning
+effective power management policies in HPC environments.
+This is a non-trivial result: offline RL is known to struggle with distribution shift
+when the deployed policy visits states that are underrepresented in the training dataset.
+The success of the approach in Chapters~\ref{CH4_HPDC} and~\ref{CH5_ICS} suggests that
+the state-action distribution induced by static power cap sweeps is rich enough to
+cover the states visited by the optimal policy, at least for the class of workloads
+studied.
+This finding has practical significance beyond HPC: it implies that production systems
+with access to historical telemetry data can develop adaptive control policies without
+any live experimentation, which is a prerequisite for deploying RL in safety-critical
+or high-availability computing environments.
+
+\textbf{Preference-conditioned control as a deployment interface.}
+The DDMORL framework's contribution of a single user-facing scalar parameter $\delta$
+as the interface between the operator's performance requirements and the controller's
+internal decision-making reflects a broader principle: that the complexity of a
+multi-objective optimization problem should be hidden from the user at the deployment
+interface.
+HPC administrators and scientific computing users are not equipped to reason about
+abstract preference weights in a multi-objective reward formulation, but they can
+readily specify a maximum acceptable performance degradation in percentage terms.
+Bridging this gap through the $\mathcal{G}_{app}$ progress model demonstrates that
+domain-specific knowledge about the system can be used to transform a user-facing
+specification into a form that is compatible with the internal RL machinery.
+
+\textbf{The continuum from node to edge.}
+Chapters~\ref{CH3_IC2E} through~\ref{CH5_ICS} address energy efficiency at the
+granularity of a single compute node, while Chapter~\ref{CH6_Charon} addresses
+resource management at the scale of a distributed edge-to-HPC workflow.
+These two levels of the hierarchy are not independent: the efficiency of the HPC nodes
+that receive data from edge devices is a direct input to the end-to-end performance of
+the scientific workflow, and the resource decisions made at the edge affect the volume
+and timing of data arriving at the HPC tier.
+A fully integrated adaptive control system for the edge-to-HPC continuum would need to
+coordinate decisions across both levels simultaneously, a challenge that the individual
+contributions of this dissertation are well-positioned to address in combination.
+
+\section{Broader Impact and Future Directions}
+
+The quantitative achievements of this dissertation can be stated compactly.
+The online RL controller of Chapter~\ref{CH3_IC2E} demonstrated 21\% energy reduction
+with 6.5\% performance loss on a single benchmark.
+The offline RL controller of Chapter~\ref{CH4_HPDC} generalized this to 20.34\%
+average savings with 7.4\% average degradation across twelve benchmarks, without
+requiring any live interaction with the target system during training.
+The DDMORL framework of Chapter~\ref{CH5_ICS} extended the result further, achieving
+31 to 39\% savings on memory-bandwidth-bound workloads and 20 to 31\% on compute-bound
+workloads, while placing the control of the energy-performance trade-off directly in
+the hands of the user through a single interpretable parameter.
+The Charon framework of Chapter~\ref{CH6_Charon} demonstrated real-time resource
+arbitration for a scientific edge-to-HPC workflow, meeting a 1,000 images per second
+throughput target through adaptive PD control and model quantization.
+
+The most immediate future direction for the node-level work is the extension of DDMORL
+to multi-node environments, where PCAP decisions must be coordinated across nodes that
+share communication bandwidth.
+The state and action spaces in this setting grow combinatorially with the number of
+nodes, and the single-node progress signal must be augmented with inter-node
+communication statistics to capture the bottlenecks that arise in tightly coupled
+parallel applications.
+Hierarchical control architectures, in which the node-level DDMORL controller developed
+here operates within a higher-level job-scheduler-level policy, represent a natural
+path toward end-to-end energy optimization from the scheduling layer down to the
+hardware actuator.
+
+For the edge-to-HPC setting, the most promising direction is the replacement of the
+PD controller in Charon with a reinforcement learning agent.
+The monitoring infrastructure and performance signal definitions developed for Charon
+provide the environment interface such an agent would require, and the offline RL
+methodology demonstrated in Chapters~\ref{CH4_HPDC} and~\ref{CH5_ICS} could be
+applied directly to the execution traces collected by the Charon framework, avoiding
+the need for live experimentation on production beamline systems.
+
+A broader research question opened by this work is the applicability of the progress-rate
+feedback paradigm to GPU-accelerated workloads and to AI training and inference
+pipelines, which represent an increasing fraction of the energy footprint documented in
+Chapter~\ref{CH1_Introduction}.
+Extending the instrumentation and control framework to heterogeneous CPU-GPU nodes,
+where multiple power domains must be controlled jointly and the progress signal must
+account for data transfer latency between host and device memory, is a technically
+demanding but high-impact problem.
+The success of the CPU-only controllers documented here provides both a baseline and a
+methodology that can be adapted to this setting.
+
+Finally, the DDMORL framework's demonstration of preference-conditioned control opens
+the possibility of integrating energy-performance trade-off management directly into
+the job submission interface of HPC facilities.
+If each user can specify a performance degradation tolerance at the time of job
+submission, the facility scheduler can use the DDMORL controller to operate each node
+at the corresponding operating point, aggregating energy savings across the full
+workload mix without any manual tuning by the system administrator.
+This would bring the efficiency gains demonstrated in controlled single-node experiments
+to the scale of production facilities, where the compounded effect of even modest
+per-node savings has measurable impact on the facility's total energy expenditure and
+carbon footprint.
+
+\section{Closing Remarks}
+
+The work presented in this dissertation demonstrates that reinforcement learning is a
+practical and effective framework for adaptive energy management in high-performance
+computing, capable of operating without prior knowledge of the hardware platform or
+the running application, adaptable to user-specified performance constraints, and
+generalizable across diverse workload types.
+The progression from model-based online control to model-free offline control to
+preference-conditioned multi-objective control reflects a systematic decomposition of
+the barriers to deployment in real HPC environments, with each contribution removing
+one such barrier while preserving the efficiency gains of its predecessor.
+The extension to the edge-to-HPC continuum establishes that the same principles of
+feedback-driven adaptive control are applicable at a broader scale, and identifies a
+concrete path toward integrating the node-level and continuum-level contributions into
+a unified energy-aware resource management framework for scientific computing.
+As the energy footprint of data centers and AI infrastructure continues to grow, the
+importance of tools that can close the gap between peak hardware capability and
+efficient operational practice will only increase, and the techniques developed in this
+dissertation represent a meaningful step in that direction.

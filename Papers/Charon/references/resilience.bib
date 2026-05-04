@@ -1,0 +1,276 @@
+@INPROCEEDINGS{SZ,
+  author={Di, Sheng and Cappello, Franck},
+  booktitle={2016 IEEE International Parallel and Distributed Processing Symposium (IPDPS)}, 
+  title={Fast Error-Bounded Lossy {HPC} Data Compression with {SZ}}, 
+  year={2016},
+  volume={},
+  number={},
+  pages={730--739},
+  doi={10.1109/IPDPS.2016.11}}
+
+@inproceedings{VeloC-SC18,
+  author = {Nicolae, Bogdan and Cappello, Franck and Moody, Adam and Gonsiorowski, Elsa and Mohror, Kathryn},
+  title = {{VeloC}: Very Low Overhead Checkpointing System},
+  booktitle = {{SC '18: 31st International Conference for High Performance Computing,
+  	Networking, Storage and Analysis}},
+  year = {2018},
+  address = {Dallas, TX, USA},
+  url = {https://sc18.supercomputing.org/proceedings/tech_poster/poster_files/post230s2-file3.pdf},
+  note = {Poster Session},
+  keywords = {HPC, resilience, checkpoint-restart}
+}
+
+
+@article{Replication,
+  author    = {Wei Hu and
+               Guangming Liu and
+               Yanhuang Jiang},
+  title     = {{FTRP}: A new fault tolerance framework using process replication
+               and prefetching for high-performance computing},
+  journal   = {Frontiers Inf. Technol. Electron. Eng.},
+  volume    = {19},
+  number    = {10},
+  pages     = {1273--1290},
+  year      = {2018},
+  url       = {https://doi.org/10.1631/FITEE.1601450},
+  doi       = {10.1631/FITEE.1601450},
+  timestamp = {Thu, 05 Mar 2020 17:10:13 +0100},
+  biburl    = {https://dblp.org/rec/journals/jzusc/HuLJ18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@inproceedings{Migration, author = {Behera, Subhendu and Wan, Lipeng and Mueller, Frank and Wolf, Matthew and Klasky, Scott}, title = {Orchestrating Fault Prediction with Live Migration and Checkpointing}, year = {2020}, isbn = {9781450370523}, publisher = {Association for Computing Machinery}, address = {New York, NY, USA}, url = {https://doi.org/10.1145/3369583.3392672}, doi = {10.1145/3369583.3392672}, 
+booktitle = {Proceedings of the 29th International Symposium on High-Performance Parallel and Distributed Computing}, pages = {167–171}, numpages = {5}, keywords = {proactive live migration, checkpoint/restart, burst buffers, high performance computing, failure prediction, I/O subsystem}, location = {Stockholm, Sweden}, series = {HPDC '20} }
+
+
+
+@INPROCEEDINGS{AKKA,
+  author={Ozaki, K. and Watanabe, K. and Itaya, S. and Hayashibara, N. and Enokido, T. and Takizawa, M.},
+  booktitle={20th International Conference on Advanced Information Networking and Applications -- Volume 1 (AINA'06)}, 
+  title={A fault-tolerant model for wireless sensor-actor system}, 
+  year={2006},
+  volume={2},
+  number={},
+  numpages={5},
+  doi={10.1109/AINA.2006.24}}
+
+
+@inproceedings{Culler, author = {Hochschild, Peter H. and Turner, Paul and Mogul, Jeffrey C. and Govindaraju, Rama and Ranganathan, Parthasarathy and Culler, David E. and Vahdat, Amin}, title = {Cores That Don't Count}, year = {2021}, isbn = {9781450384384}, publisher = {Association for Computing Machinery}, address = {New York, NY, USA}, url = {https://doi.org/10.1145/3458336.3465297}, doi = {10.1145/3458336.3465297}, abstract = {We are accustomed to thinking of computers as fail-stop, especially the cores that execute instructions, and most system software implicitly relies on that assumption. During most of the VLSI era, processors that passed manufacturing tests and were operated within specifications have insulated us from this fiction. As fabrication pushes towards smaller feature sizes and more elaborate computational structures, and as increasingly specialized instruction-silicon pairings are introduced to improve performance, we have observed ephemeral computational errors that were not detected during manufacturing tests. These defects cannot always be mitigated by techniques such as microcode updates, and may be correlated to specific components within the processor, allowing small code changes to effect large shifts in reliability. Worse, these failures are often "silent" - the only symptom is an erroneous computation.We refer to a core that develops such behavior as "mercurial." Mercurial cores are extremely rare, but in a large fleet of servers we can observe the disruption they cause, often enough to see them as a distinct problem - one that will require collaboration between hardware designers, processor vendors, and systems software architects.This paper is a call-to-action for a new focus in systems research; we speculate about several software-based approaches to mercurial cores, ranging from better detection and isolating mechanisms, to methods for tolerating the silent data corruption they cause.}, booktitle = {Proceedings of the Workshop on Hot Topics in Operating Systems}, pages = {9–16}, numpages = {8}, location = {Ann Arbor, Michigan}, series = {HotOS '21} }
+
+
+@article{Facebook,
+  author    = {Harish Dattatraya Dixit and
+               Sneha Pendharkar and
+               Matt Beadon and
+               Chris Mason and
+               Tejasvi Chakravarthy and
+               Bharath Muthiah and
+               Sriram Sankar},
+  title     = {Silent Data Corruptions at Scale},
+  journal   = {CoRR},
+  volume    = {abs/2102.11245},
+  year      = {2021},
+  url       = {https://arxiv.org/abs/2102.11245},
+  eprinttype = {arXiv},
+  eprint    = {2102.11245},
+  timestamp = {Wed, 24 Feb 2021 15:42:45 +0100},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-2102-11245.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{Edge-SDC1,
+title = {An efficient structure to improve the reliability of deep neural networks on {ARMs}},
+journal = {Microelectronics Reliability},
+volume = {136},
+pages = {114729},
+year = {2022},
+issn = {0026-2714},
+doi = {https://doi.org/10.1016/j.microrel.2022.114729},
+url = {https://www.sciencedirect.com/science/article/pii/S0026271422002530},
+author = {Zhi Liu and Xinni Yang},
+keywords = {Deep neural network, Error resilience, Embedded systems, Safety-critical, Soft errors, Reliability},
+abstract = {As Deep Neural Networks (DNNs) become more pervasive in safety-critical embedded systems, improving the soft error resilience of DNNs will grow increasingly important. This paper proposes a Distribution-based Error Detector (DED) to improve DNN's reliability. We compare the proposed approach with the regularization method and the typical Symptom-based Error Detector (SED). From the perspective of the bit error resilience, DED provides the highest fault coverage. Our results show that DED DNNs' Silent Data Corruption rates are less than 0.02 even if error bit rates are up to 1. Further, regarding Architecture Vulnerability Factor (AVF) results, we observe that the regularization method and the SED cannot improve the error resilience of register files for quantized DNNs. On the contrary, DED can reduce the SDC AVF by order of magnitude. In addition, DED can increase Mean Work To Failure (MWTF) by more than 19×, while the regularization method and the SED only increase MWTF by less than 2×.}
+}
+
+@ARTICLE{Edge-SDC2,
+  author={Abich, Geancarlo and Gava, Jonas and Garibotti, Rafael and Reis, Ricardo and Ost, Luciano},
+  journal={IEEE Transactions on Circuits and Systems {I}: Regular Papers}, 
+  title={Applying Lightweight Soft Error Mitigation Techniques to Embedded Mixed Precision Deep Neural Networks}, 
+  year={2021},
+  volume={68},
+  number={11},
+  pages={4772--4782},
+  doi={10.1109/TCSI.2021.3097981}}
+
+@ARTICLE{Edge-SDC3,
+  author={Abich, Geancarlo and Garibotti, Rafael and Reis, Ricardo and Ost, Luciano},
+  journal={IEEE Transactions on Circuits and Systems {II}: Express Briefs}, 
+  title={The Impact of Soft Errors in Memory Units of Edge Devices Executing Convolutional Neural Networks}, 
+  year={2022},
+  volume={69},
+  number={3},
+  pages={679--683},
+  doi={10.1109/TCSII.2022.3141243}}
+
+@article{BENOIT2018209,
+title = {Coping with silent and fail-stop errors at scale by combining replication and checkpointing},
+journal = {Journal of Parallel and Distributed Computing},
+volume = {122},
+pages = {209--225},
+year = {2018},
+issn = {0743-7315},
+doi = {https://doi.org/10.1016/j.jpdc.2018.08.002},
+url = {https://www.sciencedirect.com/science/article/pii/S0743731518305835},
+author = {Anne Benoit and Aurélien Cavelan and Franck Cappello and Padma Raghavan and Yves Robert and Hongyang Sun},
+keywords = {Replication, Checkpointing, Fault tolerance, Silent errors, Fail-stop errors, High-performance computing},
+abstract = {This paper provides a model and an analytical study of replication as a technique to cope with silent errors, as well as a mixture of both silent and fail-stop errors on large-scale platforms. Compared with fail-stop errors that are immediately detected when they occur, silent errors require a detection mechanism. To detect silent errors, many application-specific techniques are available, either based on algorithms (e.g., ABFT), invariant preservation or data analytics, but replication remains the most transparent and least intrusive technique. We explore the right level (duplication, triplication or more) of replication for two frameworks: (i) when the platform is subject to only silent errors, and (ii) when the platform is subject to both silent and fail-stop errors. A higher level of replication is more expensive in terms of resource usage but enables to tolerate more errors and to even correct some errors, hence there is a trade-off to be found. Replication is combined with checkpointing and comes with two flavors: process replication and group replication. Process replication applies to message-passing applications with communicating processes. Each process is replicated, and the platform is composed of process pairs, or triplets. Group replication applies to black-box applications, whose parallel execution is replicated several times. The platform is partitioned into two halves (or three thirds). In both scenarios, results are compared before each checkpoint, which is taken only when both results (duplication) or two out of three results (triplication) coincide. Otherwise, one or more silent errors have been detected, and the application rolls back to the last checkpoint, as well as when fail-stop errors have struck. We provide a detailed analytical study for all of these scenarios, with formulas to decide, for each scenario, the optimal parameters as a function of the error rate, checkpoint cost, and platform size. We also report a set of extensive simulation results that nicely corroborates the analytical model.}
+}
+
+@InProceedings{Eduardo2016,
+author="Berrocal, Eduardo
+and Bautista-Gomez, Leonardo
+and Di, Sheng
+and Lan, Zhiling
+and Cappello, Franck",
+editor="Dutot, Pierre-Fran{\c{c}}ois
+and Trystram, Denis",
+title="Exploring Partial Replication to Improve Lightweight Silent Data
+Corruption Detection for {HPC} Applications",
+booktitle="Euro-Par 2016: Parallel Processing",
+year="2016",
+publisher="Springer International Publishing",
+address="Cham",
+pages="419--430",
+abstract="Silent data corruption (SDC) poses a great challenge for high-performance computing (HPC) applications as we move to extreme-scale systems. If not dealt with properly, SDC has the potential to influence important scientific results, leading scientists to wrong conclusions. In previous work, our detector was able to detect SDC in HPC applications to a certain level by using the peculiarities of the data (more specifically, its ``smoothness'' in time and space) to make predictions. Accurate predictions allow us to detect corruptions when data values are far ``enough'' from them. However, these data-analytic solutions are still far from fully protecting applications to a level comparable with more expensive solutions such as full replication. In this work, we propose partial replication to overcome this limitation. More specifically, we have observed that not all processes of an MPI application experience the same level of data variability at exactly the same time. Thus, we can smartly choose and replicate only those processes for which our lightweight data-analytic detectors would perform poorly. Our results indicate that our new approach can protect the MPI applications analyzed with 49--53 {\%} less overhead than that of full duplication with similar detection recall.",
+isbn="978-3-319-43659-3"
+}
+
+@inproceedings{TimeMachine,
+  title={Time Machine: Generative Real-Time Model for Failure (and Lead Time) Prediction in {HPC} Systems},
+  author={Khalid Ayedh Alharthi and Arshad Jhumka and Sheng Di and Lin Gui and Franck Cappello and Simon McIntosh-Smith},
+  booktitle={2023 53rd Annual IEEE/IFIP International Conference on Dependable Systems and Networks (DSN)}, 
+  year={2023}
+}
+
+@INPROCEEDINGS{macord,
+  author={Subasi, Omer and Di, Sheng and Balaprakash, Prasanna and Unsal, Osman and Labarta, Jesus and Cristal, Adrian and Krishnamoorthy, Sriram and Cappello, Franck},
+  booktitle={2017 IEEE International Conference on Cluster Computing (CLUSTER)}, 
+  title={{MACORD}: Online Adaptive Machine Learning Framework for Silent Error Detection}, 
+  year={2017},
+  pages={717-724},
+  doi={10.1109/CLUSTER.2017.128}}  
+
+@ARTICLE{AID,
+  author={Di, Sheng and Cappello, Franck},
+  journal={IEEE Transactions on Parallel and Distributed Systems}, 
+  title={Adaptive Impact-Driven Detection of Silent Data Corruption for {HPC} Applications}, 
+  year={2016},
+  volume={27},
+  number={10},
+  pages={2809--2823},
+  doi={10.1109/TPDS.2016.2517639}}
+
+@article{Aupy2012,
+  author    = {Guillaume Aupy and
+               Yves Robert and
+               Fr{\'{e}}d{\'{e}}ric Vivien and
+               Dounia Zaidouni},
+  title     = {Impact of fault prediction on checkpointing strategies},
+  journal   = {CoRR},
+  volume    = {abs/1207.6936},
+  year      = {2012},
+  url       = {http://arxiv.org/abs/1207.6936},
+  eprinttype = {arXiv},
+  eprint    = {1207.6936},
+  timestamp = {Mon, 13 Aug 2018 16:48:59 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-1207-6936.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@ARTICLE{edgedb,
+  author={Yang, Yang and Cao, Qiang and Jiang, Hong},
+  journal={IEEE Access}, 
+  title={{EdgeDB}: An Efficient Time-Series Database for Edge Computing}, 
+  year={2019},
+  volume={7},
+  number={},
+  pages={142295--142307},
+  doi={10.1109/ACCESS.2019.2943876}}
+
+@INPROCEEDINGS{8258103,
+  author={Oyekanlu, Emmanuel},
+  booktitle={2017 IEEE International Conference on Big Data (Big Data)}, 
+  title={Predictive edge computing for time series of industrial {IoT} and large scale critical infrastructure based on open-source software analytic of big data}, 
+  year={2017},
+  volume={},
+  number={},
+  pages={1663--1669},
+  doi={10.1109/BigData.2017.8258103}}  
+
+@INPROCEEDINGS{lossless-edge-computing,
+  author={Gia, T. N. and Qingqing, L. and Queralta, J. Peña and Tenhunen, H. and Zou, Z. and Westerlund, T.},
+  booktitle={2019 Twelfth International Conference on Mobile Computing and Ubiquitous Network (ICMU)}, 
+  title={Lossless Compression Techniques in Edge Computing for Mission-Critical Applications in the {IoT}}, 
+  year={2019},
+  volume={},
+  number={},
+  pages={1--2},
+  doi={10.23919/ICMU48249.2019.9006647}}  
+
+@inproceedings{das2018desh,
+	title        = {Desh: Deep learning for system health prediction of lead times to failure in {HPC}},
+	author       = {Das, Anwesha and Mueller, Frank and Siegel, Charles and Vishnu, Abhinav},
+	year         = 2018,
+	booktitle    = {Proceedings of the 27th International Symposium on High-Performance Parallel and Distributed Computing},
+	pages        = {40--51}
+}  
+
+@article{gao2020task,
+	title        = {Task failure prediction in cloud data centers using deep learning},
+	author       = {Gao, Jiechao and Wang, Haoyu and Shen, Haiying},
+	year         = 2020,
+	journal      = {IEEE Transactions on Services Computing},
+	publisher    = {IEEE}
+}
+
+@inproceedings{islam2020anomaly,
+  title={Anomaly detection in cloud components},
+  author={Islam, Mohammad Saiful and Miranskyy, Andriy},
+  booktitle={2020 IEEE 13th International Conference on Cloud Computing (CLOUD)},
+  pages={1--3},
+  year={2020},
+  organization={IEEE}
+}
+
+
+@INPROCEEDINGS{8450459,
+  author={Azar, Joseph and Darazi, Rony and Habib, Carol and Makhoul, Abdallah and Demerjian, Jacques},
+  booktitle={2018 14th International Wireless Communications \& Mobile Computing Conference (IWCMC)}, 
+  title={Using {DWT} Lifting Scheme for Lossless Data Compression in Wireless Body Sensor Networks}, 
+  year={2018},
+  volume={},
+  number={},
+  pages={1465--1470},
+  doi={10.1109/IWCMC.2018.8450459}}  
+
+  @INPROCEEDINGS{logaider,
+  author={Di, Sheng and Gupta, Rinku and Snir, Marc and Pershey, Eric and Cappello, Franck},
+  booktitle={2017 17th IEEE/ACM International Symposium on Cluster, Cloud and Grid Computing (CCGRID)}, 
+  title={{LOGAIDER}: A Tool for Mining Potential Correlations of {HPC} Log Events}, 
+  year={2017},
+  volume={},
+  number={},
+  pages={442--451},
+  doi={10.1109/CCGRID.2017.18}}
+
+  @misc{scikit-learn,
+  title={Scikit-Learn},
+  howpublished={\url{https://scikit-learn.org/stable/}}
+  }
+
+  @misc{pytorch,
+  title={Pytorch},
+  howpublished={\url{https://pytorch.org/}}
+  
+  }

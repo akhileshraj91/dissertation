@@ -1,0 +1,52 @@
+
+%%% Chapter 6: Decay Driven Reinforcement-Learning-Based Power Control
+%%%            for Single Node Energy Efficiency
+%%% Based on: ICS 2026 paper
+%%% Authors: Akhilesh Raj (Vanderbilt University), Swann Perarnau,
+%%%          Solomon Bekele Abera (Argonne National Laboratory),
+%%%          Aniruddha Gokhale (Vanderbilt University)
+
+\chapter{Decay-Driven Reinforcement-Learning-Based Power Control for Single Node Energy Efficiency} \label{CH6_ICS}
+
+% Set the figure path for this chapter
+\graphicspath{{Papers/ICS2026/}}
+\normalsize\doublespacing
+
+\section*{Abstract}
+Energy efficiency in high-performance computing (HPC) systems is increasingly
+critical, yet balancing energy savings against application performance remains a
+fundamental challenge. Existing reinforcement learning (RL)-based approaches either
+require costly online exploration or train separate agents for each desired
+performance-energy trade-off, limiting their practicality in production HPC
+environments. In this chapter, we present \textit{Decay-Driven Multi-Objective
+Reinforcement Learning} (DDMORL), a single offline-trained controller that allows
+users to specify their maximum tolerable performance degradation as a percentage,
+which is automatically converted to a preference vector aligned with the
+corresponding operating point on the Pareto front. This eliminates the need for
+multiple agents, manual preference tuning, or online retraining. DDMORL extends
+the Preference-Driven MORL (PDMORL) framework to an offline setting by replacing
+the conventional preference-alignment interpolator with a lightweight,
+application-specific progress-to-PCAP model. The controller is trained on
+pre-collected execution traces from a mixed dataset of eight benchmarks, comprising
+STREAM memory-bandwidth variants and NAS Parallel Benchmarks. It is then deployed
+without retraining on out-of-distribution test workloads, where it produces
+well-structured Pareto fronts while keeping performance degradation within the
+user-specified limit.
+
+\input{Papers/ICS2026/Sections/Introduction}
+
+\input{Papers/ICS2026/Sections/Background}
+
+\input{Papers/ICS2026/Sections/Problem}
+
+\input{Papers/ICS2026/Sections/Methodology}
+
+\input{Papers/ICS2026/Sections/Experimental-setup}
+
+\input{Papers/ICS2026/Sections/Empirical}
+
+\input{Papers/ICS2026/Sections/Related}
+
+\input{Papers/ICS2026/Sections/Conclusions}
+
+\input{Papers/ICS2026/Sections/Acknowledgement}

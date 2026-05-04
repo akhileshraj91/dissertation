@@ -1,0 +1,21 @@
+\section{Related Work}
+\label{sec:related}
+Cybersecurity Testbeds designed for AI testing and evaluation, particularly within the OpenAI Gym environment, can be broadly classified into simulation and emulation testbeds. On the simulator side, there are tools like \textit{CyberBattleSim (CBS)}, \textit{Network Attack Simulator (NASim)} and \textit{CybORG}. 
+
+On the emulator front, the testbeds NASimEmu \cite{janisch2023nasimemunetworkattacksimulator} and  CyGIL \cite{li2021cygil} provide the AI training and testing of cybersecurity agents. 
+CyGIL \cite{li2021cygil} employs a stateless environment architecture and integrates the MITRE ATT\&CK framework to create a high-fidelity training environment. It features an abstracted interface that facilitates reinforcement learning (RL) training to focus on specific advanced persistent threat (APT) profiles. It also assumes that it has red team coordination and control (C2) infrastructure with centralized coordination and distributed execution. 
+Currently, CyGIL only supports testing red agents. CyGIL relies on CALDERA to enable red team emulation
+using the MITRE ATT\&CK framework that encompasses and analyses reported cyber-attack tactics, techniques, and procedures (TTPs). NaSimEmu relies on metasploit for enabling red team control and attack execution. To that end, we enhance the Reinforcement Against Malicious Penetration by Adversaries in Realistic Topologies (RAMPART) \cite{10564815} project, which already supports these attributes, by integrating the proposed testbed.
+
+
+% Latter is the end goal of the larger Reinforcement Against Malicious Penetration by Adversaries in Realistic Topologies (RAMPART) \cite{10564815} project, of which this testbed is a part of. 
+Presently, these platforms lack the use-cases where the observables for the agents are host or application-specific. In this paper, we focus on integrating a real-world OT emulator, providing users with access to emulation-generated measurements that enhance network agents' decision-making capabilities. By developing the proposed emulator for research communities to test and evaluate their reinforcement learning agents, we ensure:
+% \vspace{-0.5cm}
+\begin{itemize}
+    \item supported software and hardware stacks,
+    \item a state of the art network infrastructure facilitating customizable user/ application interface and interactions,
+    \item a generic and scalable network topology with provisioned host images supported to run the use cases,
+    \item a state of the art emulator capable of recreating OT plant behavior with OT-specific observations.
+\end{itemize}
+% \vspace{-1cm}
+

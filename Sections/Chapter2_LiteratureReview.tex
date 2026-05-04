@@ -1,0 +1,541 @@
+
+\chapter{Background and Related Work} \label{CH2_LiteratureReview}
+
+\normalsize\doublespacing
+
+This chapter surveys the landscape of energy-performance co-optimization in high-performance
+computing (HPC) at the node level, covering the physical limits that motivate this research,
+the theoretical scheduling foundations that frame the optimization problem, the hardware
+and software mechanisms available to actuate power, the control and learning strategies
+proposed to exploit them, the performance metrics used to close the feedback loop, and
+the edge computing platforms that connect scientific instruments to HPC systems.
+
+%% =========================================================
+\section{The Exascale Power Wall and Heterogeneous Architectures}
+%% =========================================================
+
+The exponential growth in transistor density predicted by Moore's Law delivered roughly
+a doubling of single-thread performance every two years for three decades.
+Dennard scaling~\cite{Dennard1974}, the companion observation that power density remains
+constant as transistors shrink, was the physical foundation of that trend.
+As feature sizes fell below~\SI{65}{\nano\meter}, however, leakage current grew super-linearly
+and Dennard scaling broke down: frequency stopped climbing, leaving power as the primary
+constraint on compute density.
+
+The result is the \emph{power wall}.  Modern leadership-class systems approach or exceed
+100\,MW of facility power, and the cost of that electricity over a machine's lifetime can
+rival its capital cost.  Procurement agencies at national laboratories and supercomputing
+centers now impose hard power-budget constraints at installation time, shifting the design
+objective from peak floating-point throughput to performance-per-watt.
+Rountree et al.~\cite{rountree2012beyond} showed that even hardware-enforced power bounds
+are more nuanced than simple frequency throttling: the relationship between a power cap, the
+resulting frequency, and application throughput is non-linear and workload-dependent.
+
+The transition to heterogeneous nodes - pairing multi-core CPUs with one or more
+many-core accelerators (GPUs, FPGAs, or co-processors) - compounds the challenge.
+Heterogeneous architectures expose a wider dynamic range of power consumption per
+device and create multiple distinct power domains that must be controlled jointly.
+Static assignment of power to each device ignores the fact that workload phases
+shift the bottleneck between the CPU and the accelerator over time.
+The analysis by Wang et al.~\cite{10.1145/3716872} demonstrates this point: on
+CPU-GPU platforms, decentralized per-device RL agents with centralized coordination
+improve performance by 8.5\,\% over state-of-the-art heuristics precisely because
+they can track the shifting power demand dynamically.
+Maximizing efficiency on such systems therefore requires fine-grained, adaptive
+control strategies rather than coarse-grained static allocations.
+
+%% =========================================================
+\section{Energy-Aware Scheduling Theory}
+%% =========================================================
+
+A theoretical foundation for energy-efficient computing comes from classical
+scheduling theory, which provides provably optimal or competitive algorithms for
+assigning execution speeds to jobs.
+The canonical formulation places a set of jobs with release times, deadlines, and
+known workloads on a variable-speed processor and seeks to minimize total energy
+consumption while satisfying performance constraints.
+
+The Yao-Demers-Shenker (YDS) algorithm~\cite{YDS} solves this problem optimally
+in the offline setting, where all job parameters are known in advance.
+YDS identifies intervals of maximum workload density and assigns constant execution
+speeds within those intervals, achieving the minimum possible energy while meeting
+all deadlines.
+Earliest Deadline First (EDF) scheduling is commonly paired with YDS-derived speed
+functions as an online policy~\cite{YDS}.
+For scenarios without explicit deadlines, prior work considers minimizing a
+combination of energy and flow time, yielding different optimality criteria and
+competitive guarantees~\cite{ALBERS20151194}.
+Online algorithms are evaluated using competitive analysis: an algorithm is
+\emph{c-competitive} if its objective value is within a factor $c$ of the optimal
+offline solution for any input~\cite{YDS,ALBERS20151194}.
+
+While these formulations provide strong theoretical insights, they assume precise
+knowledge of job characteristics and speed-power relationships.
+Modern HPC applications exhibit complex, hardware-dependent behavior that
+invalidates closed-form speed-power models, and workloads arrive dynamically
+without advance knowledge of future jobs.
+This gap between scheduling theory and practice motivates the data-driven,
+application-agnostic control approaches presented in Chapters~\ref{CH3_IC2E}
+through~\ref{CH5_ICS}.
+
+%% =========================================================
+\section{Hardware Power Actuators}
+%% =========================================================
+
+Effective software power management depends on hardware mechanisms that expose
+the power-performance trade-off as a controllable degree of freedom.
+This section reviews the principal actuators available on contemporary HPC nodes.
+
+\subsection{Dynamic Voltage and Frequency Scaling}
+
+Dynamic voltage and frequency scaling (DVFS) has been the canonical hardware
+power actuator for three decades.
+Because dynamic power scales as $P \propto C V^2 f$, reducing the operating
+frequency~$f$ (and the supply voltage~$V$ that must accompany it to maintain
+timing margins) yields a cubic reduction in dynamic power at the cost of longer
+execution time.
+The Linux \texttt{cpufreq} framework~\cite{wysocki2017cpufreq} exposes
+P-state selection to the operating system and user-space governors, enabling
+coarse-grained software control.
+Poellabauer et al.~\cite{DVFS_Control} demonstrated feedback-driven DVFS for
+memory-bound real-time applications: by using cache-miss rates as a leading
+indicator of future CPU demand, the controller reduces energy while meeting
+timing constraints more reliably than utilization-only predictors.
+Chen et al.~\cite{DVFS_optimization} extended DVFS to multiprocessor
+system-on-chip designs, combining it with dynamic power management (DPM)
+sleep states to find energy-optimal configurations for real-time task sets.
+
+A critical limitation of DVFS on modern CPUs is that its effectiveness is
+workload-dependent.  Compute-bound applications that fully utilize the
+execution pipeline gain little energy benefit from frequency reduction - the
+longer execution time offsets the lower instantaneous power.
+Cochran et al.~\cite{cochran2011pack} addressed this by coupling DVFS with
+thread packing: consolidating threads onto fewer cores allows unused cores to
+enter deep sleep, recovering static leakage savings that DVFS alone cannot
+achieve.
+
+\subsection{Intel Running Average Power Limit}
+
+Intel's Running Average Power Limit (RAPL)~\cite{david2010rapl} interface
+introduced hardware-enforced power capping directly in the processor and memory
+controller.  Unlike DVFS, which adjusts voltage and frequency in discrete
+P-state steps, RAPL enforces a time-averaged power constraint by throttling
+clock delivery across an entire power domain - the package, the DRAM, or
+individual cores - on a millisecond timescale.
+This makes RAPL a powerful actuator for software controllers because it
+abstracts away the detailed mechanics of frequency selection and exposes a
+single power-budget knob per domain.
+
+RAPL's package power limit (PKG) controls processor-side consumption, while
+the DRAM power limit controls memory-side consumption independently.
+For memory-bandwidth-bound applications, capping DRAM power can shift the
+bottleneck back to the CPU, enabling higher CPU frequency at the same node
+power budget.
+Petoumenos et al.~\cite{petoumenos2015power} characterized the conditions under
+which RAPL provides energy savings and showed that the relationship between the
+RAPL cap value and achieved power is non-trivial: power may exceed the cap
+transiently during burst phases and fall below it during idle phases.
+
+\subsection{Uncore Frequency Scaling}
+
+Beyond the compute cores, modern Intel processors expose a separate frequency
+domain for the uncore - the last-level cache, the memory controllers, and the
+ring or mesh interconnect.  Uncore frequency scaling (UFS) allows the operating
+system or a runtime to reduce this domain's clock independently of the core
+frequency, yielding savings for memory-bound workloads that would otherwise idle
+the uncore at its peak frequency between bursts.
+The Intel Speed Select Technology and \texttt{intel\_uncore\_frequency} Linux
+driver make UFS accessible to system software.
+Studies have shown UFS savings of up to 13\,\% in node-level energy for
+memory-bandwidth-bound workloads, making it an important complementary actuator
+to RAPL and core DVFS.
+
+\subsection{Processor Idle States}
+
+Modern processors expose a hierarchy of sleep states (C-states) that trade
+wake-up latency for progressively deeper power reduction.  C0 is the active
+state; C1 halts the core clock; C6 powers down the core voltage rail
+entirely, saving the largest fraction of static leakage at the cost of a
+microsecond-scale wake-up penalty.  Package C-states extend this hierarchy to
+encompass the entire socket: if all cores are in a sufficiently deep C-state,
+the package can power-gate shared structures such as the LLC and memory
+controllers.  Intelligent use of idle states requires that the OS scheduler,
+power governor, and application runtime cooperate to avoid excessive wake-up
+overhead while capturing the maximum savings during idle intervals.
+
+%% =========================================================
+\section{Software Runtime Strategies for Power Management}
+%% =========================================================
+
+Hardware actuators provide the means; software runtimes provide the policy.
+The literature spans three broad categories: heuristic and profile-driven
+runtimes, control-theoretic feedback controllers, and data-driven machine
+learning approaches.
+
+\subsection{Heuristic and Profile-Driven Runtimes}
+
+The Energy Aware Runtime (EAR)~\cite{corbalan2019ear} is a production-grade
+runtime deployed on Tier-1 European systems.  EAR detects MPI communication
+phases by monitoring MPI call frequency, then reduces the RAPL power cap or the
+core frequency during identified communication-idle windows when the application
+would otherwise burn power while stalled on collective operations.
+The key insight is that MPI barriers and collectives create predictable
+performance-insensitive intervals during which power can be reduced without
+affecting time-to-solution.
+
+A complementary approach is taken by COUNTDOWN~\cite{countdown2021libri}, which
+intercepts MPI calls via a preloaded shared library and reduces core frequency
+during the waiting time within collectives.  By operating transparently at the
+MPI level, COUNTDOWN requires no application modification and has been validated
+across production workloads on European HPC systems.
+
+The Global Extensible Open Power Manager
+(GEOPM)~\cite{eastep2017global} takes a hierarchical approach, coordinating
+power across nodes via a tree of runtime agents.  A per-node agent observes
+application progress and reallocates its fraction of the system-wide power
+budget in response.  On CORAL procurement benchmarks on a Xeon~Phi cluster,
+GEOPM's rebalancing plugin improved time-to-solution by up to 30\,\% over
+a static power allocation.
+The Bull Dynamic Power Optimizer~\cite{8514915} similarly uses in-band
+performance counters - specifically instructions-per-cycle - to
+dynamically modulate core frequencies during execution.
+
+Patki et al.~\cite{patki2015practical} demonstrated that power-constrained
+scheduling can improve job throughput by over-provisioning nodes at reduced
+frequency, fitting more concurrent jobs within a facility power budget.
+The Systemwide Power Management framework built on the Argo NodeOS~\cite{Ellsworth:16:Systemwide}
+extended this to the full system stack, linking job-scheduler power allocations
+with per-node runtime actuators.
+
+Profile-driven approaches such as the Dynamic Energy-Performance
+Optimizer (DEPO)~\cite{KRZYWANIAK2023396} pre-collect per-phase power
+profiles and replay them at runtime to match observed phases.
+While effective when training and deployment workloads are identical,
+such approaches degrade when workload characteristics shift, motivating
+adaptive and learning-based alternatives.
+
+A hybrid hardware-software approach is taken by the Performance under Power Limits
+(PUPiL) framework~\cite{zhang2016maximizing}, which jointly manipulates DVFS, core
+allocation, socket usage, memory usage, and hyperthreading to achieve energy and
+power consumption benefits beyond what raw RAPL capping alone can deliver.
+Score-P~\cite{czarnul2019energy}, designed for analysis and optimization of HPC
+applications, further enables energy-aware analysis and distinguishes between
+energy-optimal and time-optimal configurations.
+The effects of DVFS on both CPU and GPU components have been characterized
+by Ge et al.~\cite{ge2013effects}, who showed that controlling core and uncore
+frequencies independently improves efficiency across heterogeneous compute nodes.
+
+\subsection{Power Measurement and Profiling}
+
+Before any runtime can regulate power, it must first quantify what the system is
+consuming.
+Ryan et al.~\cite{8323587} surveyed methods for analyzing application-level power
+profiles at runtime, classifying them as \emph{in-band} or \emph{out-of-band}
+based on the measurement approach.
+Out-of-band methods use external meters to obtain job-level energy totals during
+or after execution; these are accurate but provide no fine-grained visibility into
+transient power phases.
+In-band methods read device-integrated sensors, such as Intel RAPL counters, at
+millisecond timescales, enabling dynamic power management by exposing instantaneous
+consumption to the controlling software.
+Raghavendra et al.~\cite{raghavendra2008no} demonstrated early use of in-band
+sensors to cut power to subsystems by detecting no-load zones during application
+execution, achieving fine-grained power regulation in a hardware-centric manner.
+Simmendinger et al.~\cite{10740868} later demonstrated that dynamic power capping,
+rather than fixed power limits, is essential for handling behavioral changes in
+applications and for redistributing available power across nodes or resources
+within a datacenter.
+Together, these profiling and measurement capabilities form the observability layer
+on which all runtime power controllers depend.
+
+\subsection{Control-Theoretic Feedback Controllers}
+
+Control theory provides a principled framework for designing power managers
+that track a performance set-point despite disturbances and model uncertainty.
+Cerf et al.~\cite{cerf2021sustaining} designed a classical
+proportional-integral-derivative (PID) controller that adjusts the RAPL power
+cap to maintain a user-specified performance level measured via hardware
+performance counters.  The controller was demonstrated to reject step
+disturbances in workload intensity while converging to within a few percent of
+the target performance.
+
+Hawila et al.~\cite{ccta22} extended this to adaptive control using a
+model-reference architecture.  Rather than tuning PID gains manually, the
+adaptive controller estimates the plant model (the mapping from RAPL cap to
+application progress) online and adjusts gains to track the reference model's
+response.  Evaluated on several HPC benchmarks, the approach achieved stable
+performance tracking without workload-specific re-tuning.
+
+CoPPer~\cite{CoPPer} combines hardware power capping with a feedback loop
+that targets soft real-time performance goals expressed as heartbeats.
+The controller modulates the RAPL power limit to track an application-specified
+throughput target, automatically trading between energy savings and performance
+based on a configurable preference.
+Ramesh et al.~\cite{ramesh2019understanding} quantified the impact of RAPL
+throttling on application progress, showing that the phase-dependent response
+of applications to power caps must be accounted for in controller design.
+
+A shared limitation of control-theoretic approaches is that they require
+a reliable performance signal to close the feedback loop.  When the available
+metrics fail to capture true application progress - for example, when IPC
+conflates useful work with stall cycles - the controller may incorrectly diagnose
+performance degradation and respond counterproductively.
+This motivates the careful study of performance proxies discussed in
+Section~\ref{sec:litrev_perf_proxies}.
+
+\subsection{Machine Learning and Reinforcement Learning Approaches}
+
+Machine learning replaces hand-tuned heuristics and plant models with
+data-driven policies that can generalize across workload conditions.
+Multi-objective machine learning (MOML) methods~\cite{MOML} construct
+performance and energy models from micro-benchmark traces and then identify
+Pareto-optimal power-cap configurations, exposing the energy-delay
+trade-off as an explicit frontier.
+
+Reinforcement learning (RL) frames power management as a sequential
+decision-making problem: at each time step the controller observes the system
+state (e.g., current power, performance, and application phase), takes an action
+(a power-cap value), and receives a reward that encodes the desired
+energy-performance trade-off.  The controller learns a policy that maximizes
+cumulative reward without requiring an explicit system model.
+Wang et al.~\cite{10.1145/3716872} proposed a multi-agent deep RL (MADRL)
+framework for CPU-GPU heterogeneous platforms, assigning an independent RL agent
+to each device.  A centralized coordinator maximizes utilization within the total
+power budget by dynamically reallocating power between agents, yielding an
+average performance improvement of 8.5\,\% over heuristic baselines.
+
+Early learning-based methods applied Q-learning and Double-Q learning
+(DDQL)~\cite{DDQL} to DVFS governors, enabling systems to adapt frequency
+decisions to observed workload behavior without an explicit system model.
+These online approaches improve energy savings over static governors, but their
+convergence time and sensitivity to hyperparameters limit their applicability in
+production HPC environments where exploration can interfere with running jobs.
+More recent efforts employ model-based or multi-objective learning techniques to
+predict performance and energy under different power-cap configurations~\cite{MOML},
+constructing performance and energy models from micro-benchmark traces and then
+identifying Pareto-optimal configurations across diverse
+workloads~\cite{HPC_proxy_applications}.
+
+Online RL requires live interaction with the production system during training,
+which can interfere with running applications, induce thermal or power
+excursions, and incur significant computational overhead.
+Offline RL~\cite{levine2020offline} addresses this by learning from a static
+dataset of previously collected execution traces, decoupling training from
+deployment.  The key algorithmic challenge is distributional shift: the trained
+policy may encounter state-action combinations absent from the dataset, leading
+to overestimated Q-values and unsafe actions.  Conservative Q-Learning
+(CQL)~\cite{levine2020offline} mitigates this by penalizing out-of-distribution
+Q-values during training.
+
+Raj et al.~\cite{ic2e23} applied online RL to node-level power capping using
+a PPO agent trained on a mathematical model of a STREAM-based compute node,
+demonstrating performance-aware power reduction through RAPL actuators.
+Building on this, the authors extended the approach to offline RL, learning an
+application-agnostic policy from pre-collected execution traces across diverse
+benchmarks~\cite{offlineRL} and validating it on out-of-distribution workloads.
+
+Multi-objective RL explicitly models the energy-performance Pareto front.
+The Preference-Driven MORL (PDMORL) framework~\cite{basaklar2023pdmorlpreferencedrivenmultiobjectivereinforcement}
+trains a single policy conditioned on a user-provided preference vector that
+selects a point on the Pareto front at deployment time, eliminating the need
+for separate agents for each trade-off configuration.
+
+Recent work has scaled RL-based power management beyond the individual compute
+node to the cluster and job-scheduler level.
+Amrizal et al.~\cite{amrizal2025spars} introduced SPARS, a simulation environment
+for training RL agents that decide when to power down idle cluster nodes, balancing
+the energy savings from node shutdown against the wake-up latency penalties that
+affect job throughput.
+Budiarjo et al.~\cite{budiarjo2025curriculum} further improved the sample efficiency
+of deep RL cluster power management by applying curriculum learning, starting the
+agent in simplified scenarios and progressively increasing workload complexity, which
+accelerates convergence and improves the quality of the learned policy.
+These cluster-level approaches are complementary to the node-level RAPL-based
+controllers presented in this dissertation: they decide \emph{which} nodes to keep
+active, while node-level controllers manage \emph{how much} power an active node
+may consume.
+
+%% =========================================================
+\section{Performance Proxies for Power Management}
+\label{sec:litrev_perf_proxies}
+%% =========================================================
+
+Closing a power-management feedback loop requires a runtime performance signal
+that is (i) available online without application instrumentation, (ii)
+responsive to changes in the power cap on a timescale that matches the
+controller's action interval, and (iii) representative of useful application
+progress rather than low-level micro-architectural activity.
+Selecting an inappropriate proxy leads to control decisions that either waste
+energy or degrade performance unnecessarily.
+
+\subsection{Instructions Per Cycle}
+
+Instructions per cycle (IPC) is the most widely used hardware performance
+counter for characterizing CPU efficiency, and it is naturally available through
+standard interfaces such as PAPI~\cite{mucci1999papi} and
+\texttt{perf\_event}.  IPC measures the ratio of retired instructions to elapsed
+clock cycles.
+
+However, IPC is an unreliable proxy for application-level progress under power
+capping.  Ramesh et al.~\cite{ramesh2019understanding} demonstrated that IPC
+can remain stable or even increase when a power cap slows execution, because
+reducing the clock frequency shrinks the denominator (elapsed cycles at the new
+frequency) proportionally.  More critically, IPC conflates useful compute work
+with instruction-level parallelism and out-of-order execution overhead: a core
+stalled awaiting a cache miss executes no useful instructions but still
+contributes to the instruction count denominator.  For memory-bandwidth-bound
+workloads - a dominant class in HPC - IPC therefore fails to distinguish the
+performance-limited regime from the power-limited regime.
+
+\subsection{Application Heartbeats}
+
+The heartbeat abstraction~\cite{acar2018heartbeat} decouples the
+application-level notion of progress from micro-architectural metrics.
+Applications emit a ``heartbeat'' (an API call) at regular semantic
+checkpoints - e.g., at the end of each time-step in a simulation, or after each
+problem partition is solved.  The heartbeat rate (heartbeats per second) is
+directly interpretable as application throughput, independent of architectural
+details such as frequency or cache behavior.  A power manager monitoring
+heartbeat rate can therefore distinguish a genuine throughput reduction caused by
+an overly aggressive power cap from a change in IPC that merely reflects
+micro-architectural reorganization.
+
+The limitation of heartbeats is that they require application instrumentation,
+which is impractical for third-party or legacy codes in production environments.
+This has motivated work on application-agnostic proxies derived purely from
+hardware counters.
+
+\subsection{Memory Requests Per Instruction and Related Metrics}
+
+For HPC workloads that are memory-bandwidth-bound, the ratio of last-level cache
+misses to retired instructions - sometimes called the Cache Miss Rate per
+instruction (CMR) or Memory Requests Per Instruction (MRPI) - captures the
+degree to which execution progress is limited by off-chip bandwidth rather than
+compute throughput.  When the power cap reduces core frequency, a
+memory-bandwidth-bound application's execution time increases in proportion,
+while its CMR remains approximately constant: each instruction still generates
+the same number of off-chip requests.  This makes CMR/MRPI a more stable proxy
+for progress than IPC under DVFS and RAPL throttling.
+
+Several works have leveraged this property.  The Bull Dynamic Power
+Optimizer~\cite{8514915} uses IPC as a phase-change indicator in combination
+with DVFS, but acknowledges that memory-bound phases require a separate
+characterization.  The offline RL approach described in
+Chapter~\ref{CH4_HPDC} adopts an application-agnostic progress metric
+derived from hardware counters and normalized to the full-power baseline, enabling
+comparison across applications with different computational footprints.
+
+\subsection{Summary}
+
+Table~\ref{tab:litrev_proxies} summarizes the performance proxies discussed
+above along with their key properties.  The central tension is between
+ease of availability (favoring hardware counters) and semantic fidelity
+(favoring application-level heartbeats).  The research presented in this
+dissertation navigates this tension by adopting a normalized progress metric
+derived from hardware performance counters, combining the availability of
+IPC-class measurements with improved robustness to frequency changes.
+
+\begin{table}[t]
+  \centering
+  \caption{Comparison of performance proxies for power management.}
+  \label{tab:litrev_proxies}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Proxy} & \textbf{Requires instrumentation} & \textbf{Frequency-robust} & \textbf{Semantic fidelity} \\
+    \midrule
+    IPC                & No  & No  & Low  \\
+    CMR / MRPI         & No  & Yes & Medium \\
+    Heartbeats         & Yes & Yes & High \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+%% =========================================================
+\section{Edge Computing and Edge-to-HPC Workflows}
+%% =========================================================
+
+Large-scale scientific experiments increasingly rely on computing systems that span
+from field-deployed sensors and instruments to centralized HPC clusters.
+In this \emph{edge-to-HPC continuum}, data is generated at remote edge nodes,
+processed locally to reduce volume and latency, and forwarded to HPC systems for
+full-scale simulation and analysis.
+Managing the resources of this continuum requires mechanisms that operate across
+heterogeneous hardware and bridge vastly different software stacks.
+
+\subsection{Container-Based Autoscaling}
+
+Modern edge deployments commonly use container orchestration platforms such as
+Kubernetes to manage application lifecycle and resource allocation.
+Proactive Kubernetes autoscalers~\cite{ju2021proactive} control the number of
+application containers and their resource allocations based on predicted demand,
+while survey work~\cite{tran2022survey} catalogs the breadth of autoscaling
+policies in use across production deployments.
+However, these autoscalers operate primarily on application-level signals and do
+not consider metrics at the workflow or infrastructure level, limiting their
+ability to coordinate resource management across the full edge-to-HPC stack.
+Furthermore, these policies are threshold-based and do not accommodate use-case
+specific designs, leaving a gap when workload-adaptive control is required.
+
+\subsection{Edge Computing Platforms for Scientific Instruments}
+
+The Waggle platform~\cite{beckman2016waggle} is a field-deployable edge computing
+node designed for environmental and scientific data collection and analysis in the
+field.
+Waggle provides scheduling capabilities that allow multiple users to share node
+resources and execute code at the edge~\cite{kim2022goal}.
+Early use of these scheduling capabilities revealed the need for finer-grained
+resource management to serve multiple concurrent applications with limited
+computational and storage budgets.
+
+To address this need, the Argo Node Resource Manager~\cite{argo-ipdps-2019}
+enables application-specific resource monitoring at runtime and supports dynamic
+resource arbitration: it tracks and reacts to changes in application behavior over
+the lifetime of a scientific experiment.
+These capabilities make Argo a natural fit for the edge tier of an integrated
+scientific computing workflow.
+The Systemwide Power Management framework~\cite{Ellsworth:16:Systemwide} similarly
+extends resource arbitration to the full system stack, linking job-scheduler power
+allocations with per-node runtime actuators.
+
+\subsection{Data Streaming Across the Continuum}
+
+Moving data efficiently between edge nodes and HPC systems is a prerequisite for
+any edge-to-HPC workflow.
+George et al.~\cite{george2025edge2hpc} characterized three cross-facility data
+streaming architectures, namely direct streaming, proxied streaming, and managed
+service streaming, analyzing their trade-offs in data flow path, deployment
+complexity, and achievable throughput.
+Their analysis using the SciStream memory-to-memory streaming framework shows that
+architectural choice has a significant impact on end-to-end latency and resource
+utilization, and that no single architecture dominates across all use cases.
+This motivates the need for adaptive middleware that can select and configure the
+appropriate streaming path based on current system conditions and workflow demands.
+
+\subsection{Edge AI Model Optimization Using HPC}
+
+A critical capability in the edge-to-HPC continuum is the ability to train or
+fine-tune AI models deployed at the edge using the full computational power of
+connected HPC systems.
+Aach et al.~\cite{aach2025edgeai} demonstrated a workflow in which edge AI models
+for quality control in additive manufacturing are optimized on HPC systems with
+the edge device active in the training loop, enabling hardware-aware model
+compression that would be impractical to perform on the edge device itself.
+The resulting models maintain high accuracy while satisfying the memory and latency
+constraints of the target edge hardware.
+This edge-in-the-loop training paradigm is representative of the broader class of
+workflows that motivate cross-continuum resource management frameworks.
+
+\subsection{Dynamic Resource Arbitration Across the Continuum}
+
+While autoscalers and platform runtimes individually improve resource utilization,
+connecting these mechanisms across the continuum remains challenging.
+Applications running at the edge need access to HPC systems for model retraining
+and large-scale analysis, requiring resource reservation and data movement
+coordination that current frameworks do not handle automatically.
+AI models deployed at the edge also need to be retrained with new experimental data
+using HPC resources, allowing workflows to adapt as scientific needs evolve.
+Chapter~\ref{CH6_Charon} presents the Charon framework, which addresses how edge
+resources can be arbitrated dynamically under user-provided performance goals, how
+system software can support AI-at-the-edge applications that leverage HPC platforms
+for model tuning, and how flexible policies can be deployed across diverse hardware
+setups and use cases.

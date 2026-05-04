@@ -1,0 +1,31 @@
+
+%%% Chapter 4: A Reinforcement Learning Approach for Performance-aware Reduction
+%%%            in Power Consumption of Data Center Compute Nodes
+%%% Based on: IC2E 2024 paper
+%%% Authors: Akhilesh Raj (Vanderbilt University), Swann Perarnau (Argonne National Laboratory),
+%%%          Aniruddha Gokhale (Vanderbilt University)
+
+\chapter{A Reinforcement Learning Approach for Performance-Aware Reduction in Power Consumption of Data Center Compute Nodes} \label{CH3_IC2E}
+
+% Set the figure path for this chapter
+\graphicspath{{Papers/IC2E/}}
+
+\section*{Abstract}
+As Exascale computing becomes a reality, the energy needs of compute nodes in cloud
+data centers will continue to grow. A common approach to reducing this energy demand
+is to limit the power consumption of hardware components when workloads are
+experiencing bottlenecks elsewhere in the system. However, designing a resource
+controller capable of detecting and limiting power consumption on-the-fly is a
+complex issue and can also adversely impact application performance. In this chapter,
+we explore the use of Reinforcement Learning (RL) to design a power capping policy
+on cloud compute nodes using observations on current power consumption and
+instantaneous application performance (heartbeats). By leveraging the Argo Node
+Resource Management (NRM) software stack in conjunction with the Intel Running
+Average Power Limit (RAPL) hardware control mechanism, we design an agent to
+control the maximum supplied power to processors without compromising on application
+performance. Employing a Proximal Policy Optimization (PPO) agent to learn an
+optimal policy on a mathematical model of the compute nodes, we demonstrate and
+evaluate using the STREAM benchmark how a trained agent running on actual hardware
+can take actions by balancing power consumption and application performance.
+
+\input{Papers/IC2E/ic2e_content}

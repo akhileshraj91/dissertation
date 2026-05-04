@@ -1,0 +1,225 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Vanderbilt University Dissertation
+%% Assembled from published and submitted research papers
+%%
+%% Template: Official Vanderbilt University Graduate School LaTeX Template
+%% (Template files in VanderbiltDissertationTemplate/ are unchanged)
+%%
+%% This file assembles the dissertation from individual paper chapters.
+%% Each chapter corresponds to one published or submitted research paper.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\listfiles
+\documentclass[10pt]{report}
+
+\usepackage[intoc]{nomencl}
+
+\textwidth=6in \oddsidemargin=0.5in \topmargin=-0.5in
+\textheight=9in  % 9in must include page numbers
+\textfloatsep = 0.4in \addtocontents{toc}{\vspace{0.4in} \hfill
+Page\endgraf} \addtocontents{lof}{\vspace{0.2in} \hspace{0.13in} \
+Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
+\hspace{0.13in} \ Table\hfill Page\endgraf}
+
+%% ---- Standard Vanderbilt template packages ----
+\usepackage{textcomp}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{setspace}
+\usepackage{mathptmx}
+\usepackage[table, svgnames]{xcolor}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{amssymb, amsmath}
+%\usepackage{subfig}   % removed: conflicts with subcaption (used by paper chapters)
+\usepackage{epsfig}
+\usepackage{times}
+\usepackage{float}
+\usepackage{rotating}
+\usepackage{makeidx}
+\usepackage{url}
+\usepackage[htt]{hyphenat}  % enable hyphenation in \texttt/\ttfamily
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+\usepackage[titles]{tocloft}  % removed 'subfigure' option: requires subfig pkg which conflicts with subcaption
+\usepackage{acronym}
+\usepackage{datetime}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}   % replaces algorithmic; compatible with algorithmicx
+
+\renewcommand{\nomname}{LIST OF ABBREVIATIONS}
+\makenomenclature
+
+\graphicspath{{Figures/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png,.PNG,.eps,.tiff}
+
+\urlstyle{same}
+
+\usepackage{makecell}
+\usepackage{titletoc}
+\usepackage{sfchap}
+\usepackage{sfsection}
+\usepackage[authoryear]{natbib}
+\usepackage{appendix}
+\usepackage[nottoc]{tocbibind}
+\setcounter{secnumdepth}{7}
+\setcounter{tocdepth}{7}
+
+%% ---- Additional packages required by paper chapters ----
+\usepackage{amsfonts}
+\usepackage{siunitx}
+\usepackage{csquotes}
+\usepackage{subcaption}
+\usepackage{caption}
+\PassOptionsToPackage{compatibility=false}{caption}
+\usepackage{makecell}
+\usepackage{epstopdf}
+\usepackage{wrapfig}
+\usepackage{scalerel}
+\usepackage{chemfig}
+\usepackage[version=3]{mhchem}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, chains, arrows.meta, positioning,
+                calc, decorations.pathmorphing, decorations.pathreplacing,
+                matrix, svg.path, fit}
+\usepackage{pgf}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.14}
+\usepackage{pgfplotstable}
+
+%% TikZ styles used by chapters
+\tikzstyle{block} = [draw,rectangle,thick,minimum height=2em,minimum width=2em]
+\tikzstyle{sum} = [draw,circle,inner sep=0mm,minimum size=2mm]
+\tikzstyle{connector} = [->,thick]
+\tikzstyle{line} = [thick]
+\tikzstyle{branch} = [circle,inner sep=0pt,minimum size=1mm,fill=black,draw=black]
+\tikzstyle{guide} = []
+\tikzstyle{snakeline} = [connector, decorate,
+    decoration={pre length=0.2cm, post length=0.2cm, snake,
+    amplitude=.4mm, segment length=2mm}, thick, magenta, ->]
+
+%% Theorem environments used by IC2E chapter
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+%% ORCID icon (used in IC2E chapter)
+\definecolor{orcidlogocol}{HTML}{A6CE39}
+\tikzset{
+  orcidlogo/.pic={
+    \fill[orcidlogocol] svg{M256,128c0,70.7-57.3,128-128,128C57.3,256,0,198.7,0,128C0,57.3,57.3,0,128,0C198.7,0,256,57.3,256,128z};
+    \fill[white] svg{M86.3,186.2H70.9V79.1h15.4v48.4V186.2z}
+                 svg{M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8,53.6h-41.8V79.1z M124.3,172.4h24.5c34.9,0,42.9-26.5,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z}
+                 svg{M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z};
+  }
+}
+\newcommand\orcidicon[1]{\href{https://orcid.org/#1}{\mbox{\scalerel*{
+\begin{tikzpicture}[yscale=-1,transform shape]
+\pic{orcidlogo};
+\end{tikzpicture}
+}{|}}}}
+
+%% Misc commands used across chapters
+\newcommand{\update}[1]{\textcolor{blue}{Update: #1}}
+\newcommand{\myfigurescale}{0.4}
+
+%% Hyperref (must come after most packages)
+\usepackage{hyperref}
+\hypersetup{
+    pdftitle={Dissertation: Human-AI Teaming, Edge-to-HPC Computing, and Reinforcement Learning for Energy Efficiency in HPC},
+    pdfauthor={Akhilesh Raj},
+    bookmarksnumbered,
+    pdfstartview={FitH},
+    pdfborder={0 0 0},
+    plainpages=false
+}
+\usepackage[all]{hypcap}
+
+%% ---- Vanderbilt template formatting commands ----
+\newcommand{\statslabel}[2]{\multirowcell{#1}[-1.6mm][c]{#2}}
+\newcommand{\otoprule}{\midrule[\heavyrulewidth]}
+\newenvironment{tightequation}{\singlespace\begin{equation}}{\end{equation}}
+
+\setlength{\cftsecnumwidth}{2.8em}
+\setlength{\cftsubsecnumwidth}{3.7em}
+\setlength{\cftsubsubsecnumwidth}{4.6em}
+\setlength{\cftparanumwidth}{5.5em}
+\setlength{\cftsubparanumwidth}{6.5em}
+\setlength{\cfttabnumwidth}{3.5em}
+\setlength{\cftfignumwidth}{3.5em}
+
+\renewcommand{\contentsname}{TABLE OF CONTENTS}
+\renewcommand{\listfigurename}{LIST OF FIGURES}
+\renewcommand{\listtablename}{LIST OF TABLES}
+\renewcommand{\bibname}{ \texorpdfstring{{References\vspace{10mm}}}{References} }
+
+\renewcommand{\chaptermark}[1]{%
+  \markboth{\MakeUppercase{%
+      \chaptername}\ \thechapter.%
+    \ #1}{}}
+
+\interfootnotelinepenalty=10000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%% Prevent duplicate page identifier warning
+\pagenumbering{alph}
+
+\input{Sections/Title}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\doublespacing
+\pagenumbering{roman} \setcounter{page}{2}
+
+\singlespacing
+\input{Sections/Copyright}
+\input{Sections/Dedication}
+\input{Sections/Acknowledgments}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\singlespacing
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begingroup
+\setlength{\parskip}{1\baselineskip}
+\listoftables
+\newpage
+\listoffigures
+\newpage
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\normalsize
+\doublespacing
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+%% ---- Dissertation Chapters ----
+\input{Sections/Chapter1_Introduction}
+\input{Sections/Chapter2_LiteratureReview}
+% \input{Sections/Chapter2_HumanAI}
+\input{Sections/Chapter3_IC2E}
+\input{Sections/Chapter4_HPDC}
+\input{Sections/Chapter5_ICS}
+\input{Sections/Chapter6_Charon}
+\input{Sections/Chapter7_Conclusions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\singlespacing
+\bibliographystyle{apalike}
+\bibliography{AllReferences}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Appendix: Additional Published Works
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\doublespacing
+\begin{appendices}
+\input{Sections/AppendixA_HumanAI}
+\input{Sections/AppendixB_OTSecurity}
+\end{appendices}
+
+\end{document}

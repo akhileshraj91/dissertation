@@ -1,0 +1,14 @@
+\section{Related Work}
+\label{sec:relatedwork}
+
+% In this section, we briefly describe existing methods on the application resource management and an edge computing platform that has delivered successful stories 
+
+\subsection{Resource Autoscaling}
+Computing clusters adjust allocated resources and application instances to meet user requirements. For example, the works using Kubernetes autoscaler~\cite{ju2021proactive, tran2022survey} control the number of application containers and their resource allocation based on reported application performance. However, the autoscaler is based on signals from the application and does not consider metrics at the workflow or infrastructure level. This situation brings the need to connect autoscaling to resource management and control at the macro level in the edge-to-HPC computing continuum. Furthermore, these autoscalers rely on simple policies (thresholds) and do not easily allow for swapping out these policies to a design adapted to the use case,
+as we are able to do with our infrastructure.
+
+% Talk about HPC workflow managements
+
+% edge computing platform for remote sensing and its sucesss stories
+\subsection{Edge Computing Platform}
+Edge computing is an active research field and can connect scientific instruments and sensors in the field to large cluster computing. The Waggle edge computing platform~\cite{beckman2016waggle}, one of the successful field-deployable nodes designed and built for data collection and analysis at the edge, has scheduling capabilities for multiple users to share node resources and run codes at the edge~\cite{kim2022goal}. Early use of these edge scheduling capabilities in Waggle revealed the need for much finer-grained resource management in order to administer limited computational and storage resources for multiple users. To provide finer-grained resource management, in this paper we adopted the Argo Node Resource Manager~\cite{argo-ipdps-2019}, which enables application-specific resource usage monitoring at run time as well as dynamic resource arbitration, enabling tracking and reacting to applications' behavioral changes during the lifetime of a scientific experiment.
