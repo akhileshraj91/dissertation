@@ -1,444 +1,214 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="Claude" modified="2026-05-02" version="21.0.0">
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1">
   <diagram id="energy_footprint_v3" name="AI Energy Footprint">
-<mxGraphModel dx="1422" dy="762" grid="0" gridSize="8" guides="1" tooltips="1" connect="0" arrows="1" fold="0" page="0" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
-  <root>
-    <mxCell id="0" />
-    <mxCell id="1" parent="0" />
-
-    <!-- ░░░ DARK CANVAS BACKGROUND ░░░ -->
-    <mxCell id="canvas_bg" value=""
-      style="fillColor=#0F172A;strokeColor=none;"
-      vertex="1" parent="1">
-      <mxGeometry x="0" y="0" width="1600" height="900" as="geometry"/>
-    </mxCell>
-
-    <!-- ═══════════ HEADER ═══════════ -->
-    <mxCell id="header" value="THE ENERGY FOOTPRINT OF AI &amp; DATA CENTERS"
-      style="rounded=0;fillColor=#1D4ED8;gradientColor=#7C3AED;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=27;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="0" y="0" width="1600" height="72" as="geometry"/>
-    </mxCell>
-    <mxCell id="hdr_sub" value="Scale, Cost, and Growth of Computing Power Consumption"
-      style="text;strokeColor=none;fillColor=none;fontColor=#A5B4FC;fontSize=14;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="0" y="48" width="1600" height="24" as="geometry"/>
-    </mxCell>
-
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <!--  PANEL 1  —  COUNTRY BAR CHART  (upper left, tall)    -->
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <mxCell id="p1_bg" value=""
-      style="rounded=1;fillColor=#1E293B;strokeColor=#334155;arcSize=2;"
-      vertex="1" parent="1">
-      <mxGeometry x="10" y="82" width="945" height="444" as="geometry"/>
-    </mxCell>
-
-    <!-- panel icon + headings -->
-    <mxCell id="p1_ico" value="🌍"
-      style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="24" y="90" width="53" height="53" as="geometry"/>
-    </mxCell>
-    <mxCell id="p1_ttl" value="Annual Electricity Consumption"
-      style="text;strokeColor=none;fillColor=none;fontColor=#F1F5F9;fontSize=20;fontStyle=1;align=left;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="85" y="90" width="452" height="29" as="geometry"/>
-    </mxCell>
-    <mxCell id="p1_sttl" value="TWh / year — Data Centers vs. Nations"
-      style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=14;align=left;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="85" y="120" width="452" height="19" as="geometry"/>
-    </mxCell>
-
-    <!-- BAR ROW: DC 2024 -->
-    <mxCell id="ico_dc24" value="🏢"
-      style="text;strokeColor=none;fillColor=none;fontSize=21;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="19" y="152" width="32" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="lbl_dc24" value="Data Centers 2024"
-      style="text;strokeColor=none;fillColor=none;fontColor=#FCA5A5;fontSize=14;fontStyle=1;align=right;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="53" y="152" width="226" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="bar_dc24" value="415 TWh"
-      style="rounded=1;arcSize=50;fillColor=#EF4444;gradientColor=#B91C1C;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=left;spacingLeft=10;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="287" y="152" width="293" height="35" as="geometry"/>
-    </mxCell>
-
-    <!-- BAR ROW: DC 2030 -->
-    <mxCell id="ico_dc30" value="📈"
-      style="text;strokeColor=none;fillColor=none;fontSize=21;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="19" y="197" width="32" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="lbl_dc30" value="Data Centers 2030 ↗"
-      style="text;strokeColor=none;fillColor=none;fontColor=#FCA5A5;fontSize=14;fontStyle=3;align=right;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="53" y="197" width="226" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="bar_dc30" value="945 TWh  (projected — capacity nearly doubles)"
-      style="rounded=1;arcSize=50;fillColor=none;strokeColor=#EF4444;fontColor=#FCA5A5;fontSize=14;fontStyle=3;align=left;spacingLeft=10;verticalAlign=middle;dashed=1;"
-      vertex="1" parent="1">
-      <mxGeometry x="287" y="197" width="660" height="35" as="geometry"/>
-    </mxCell>
-
-    <!-- separator -->
-    <mxCell id="bar_sep" value=""
-      style="line;strokeColor=#334155;fillColor=none;"
-      vertex="1" parent="1">
-      <mxGeometry x="19" y="242" width="922" height="4" as="geometry"/>
-    </mxCell>
-
-    <!-- BAR ROW: France -->
-    <mxCell id="ico_fr" value="🇫🇷"
-      style="text;strokeColor=none;fillColor=none;fontSize=21;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="19" y="255" width="32" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="lbl_fr" value="France"
-      style="text;strokeColor=none;fillColor=none;fontColor=#CBD5E1;fontSize=14;align=right;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="53" y="255" width="226" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="bar_fr" value="430 TWh"
-      style="rounded=1;arcSize=50;fillColor=#3B82F6;gradientColor=#1D4ED8;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=14;align=left;spacingLeft=10;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="287" y="255" width="303" height="35" as="geometry"/>
-    </mxCell>
-
-    <!-- BAR ROW: UK -->
-    <mxCell id="ico_uk" value="🇬🇧"
-      style="text;strokeColor=none;fillColor=none;fontSize=21;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="19" y="300" width="32" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="lbl_uk" value="United Kingdom"
-      style="text;strokeColor=none;fillColor=none;fontColor=#CBD5E1;fontSize=14;align=right;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="53" y="300" width="226" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="bar_uk" value="300 TWh"
-      style="rounded=1;arcSize=50;fillColor=#3B82F6;gradientColor=#1D4ED8;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=14;align=left;spacingLeft=10;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="287" y="300" width="211" height="35" as="geometry"/>
-    </mxCell>
-
-    <!-- BAR ROW: Sweden -->
-    <mxCell id="ico_se" value="🇸🇪"
-      style="text;strokeColor=none;fillColor=none;fontSize=21;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="19" y="346" width="32" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="lbl_se" value="Sweden"
-      style="text;strokeColor=none;fillColor=none;fontColor=#CBD5E1;fontSize=14;align=right;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="53" y="346" width="226" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="bar_se" value="140 TWh"
-      style="rounded=1;arcSize=50;fillColor=#3B82F6;gradientColor=#1D4ED8;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=14;align=left;spacingLeft=10;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="287" y="346" width="98" height="35" as="geometry"/>
-    </mxCell>
-
-    <!-- BAR ROW: Argentina -->
-    <mxCell id="ico_ar" value="🇦🇷"
-      style="text;strokeColor=none;fillColor=none;fontSize=21;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="19" y="391" width="32" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="lbl_ar" value="Argentina"
-      style="text;strokeColor=none;fillColor=none;fontColor=#CBD5E1;fontSize=14;align=right;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="53" y="391" width="226" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="bar_ar" value="130 TWh"
-      style="rounded=1;arcSize=50;fillColor=#3B82F6;gradientColor=#1D4ED8;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=14;align=left;spacingLeft=10;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="287" y="391" width="92" height="35" as="geometry"/>
-    </mxCell>
-
-    <!-- BAR ROW: Netherlands -->
-    <mxCell id="ico_nl" value="🇳🇱"
-      style="text;strokeColor=none;fillColor=none;fontSize=21;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="19" y="436" width="32" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="lbl_nl" value="Netherlands"
-      style="text;strokeColor=none;fillColor=none;fontColor=#CBD5E1;fontSize=14;align=right;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="53" y="436" width="226" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="bar_nl" value="120 TWh"
-      style="rounded=1;arcSize=50;fillColor=#3B82F6;gradientColor=#1D4ED8;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=14;align=left;spacingLeft=10;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="287" y="436" width="85" height="35" as="geometry"/>
-    </mxCell>
-
-    <!-- fact badges at bottom of panel 1 -->
-    <mxCell id="p1_badge1" value="Data Centers ≈ France's entire grid"
-      style="rounded=1;arcSize=50;fillColor=#4C1D95;gradientColor=#6D28D9;gradientDirection=east;strokeColor=none;fontColor=#DDD6FE;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="19" y="487" width="372" height="29" as="geometry"/>
-    </mxCell>
-    <mxCell id="p1_badge2" value="1.5% of global electricity now → ~3% by 2030"
-      style="rounded=1;arcSize=50;fillColor=#134E4A;gradientColor=#0F766E;gradientDirection=east;strokeColor=none;fontColor=#99F6E4;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="404" y="487" width="545" height="29" as="geometry"/>
-    </mxCell>
-
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <!--  PANEL 2  —  GPT-3 TRAINING COST  (upper right)       -->
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <mxCell id="p2_bg" value=""
-      style="rounded=1;fillColor=#1E293B;strokeColor=#334155;arcSize=2;"
-      vertex="1" parent="1">
-      <mxGeometry x="963" y="82" width="627" height="444" as="geometry"/>
-    </mxCell>
-
-    <mxCell id="p2_ico" value="🤖"
-      style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="979" y="90" width="53" height="53" as="geometry"/>
-    </mxCell>
-    <mxCell id="p2_ttl" value="Training ONE Large AI Model"
-      style="text;strokeColor=none;fillColor=none;fontColor=#F1F5F9;fontSize=20;fontStyle=1;align=left;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="1040" y="90" width="532" height="29" as="geometry"/>
-    </mxCell>
-    <mxCell id="p2_sttl" value="GPT-3: True environmental cost of a single training run"
-      style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=14;align=left;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="1040" y="120" width="532" height="19" as="geometry"/>
-    </mxCell>
-
-    <!-- large energy stat -->
-    <mxCell id="p2_e_ico" value="⚡"
-      style="text;strokeColor=none;fillColor=none;fontSize=56;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="1061" y="157" width="74" height="74" as="geometry"/>
-    </mxCell>
-    <mxCell id="p2_e_num" value="1,287 MWh"
-      style="text;strokeColor=none;fillColor=none;fontColor=#FDE68A;fontSize=34;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="979" y="234" width="319" height="45" as="geometry"/>
-    </mxCell>
-    <mxCell id="p2_e_lbl" value="Electricity consumed in one training run"
-      style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=14;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="979" y="279" width="319" height="21" as="geometry"/>
-    </mxCell>
-
-    <mxCell id="p2_divline" value=""
-      style="line;strokeColor=#334155;fillColor=none;"
-      vertex="1" parent="1">
-      <mxGeometry x="979" y="311" width="596" height="4" as="geometry"/>
-    </mxCell>
-    <mxCell id="p2_eq" value="THIS EQUALS"
-      style="text;strokeColor=none;fillColor=none;fontColor=#475569;fontSize=13;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="979" y="319" width="596" height="19" as="geometry"/>
-    </mxCell>
-
-    <!-- house -->
-    <mxCell id="p2_h_ico" value="🏠"
-      style="text;strokeColor=none;fillColor=none;fontSize=45;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="1000" y="346" width="64" height="64" as="geometry"/>
-    </mxCell>
-    <mxCell id="p2_h_num" value="120 years"
-      style="text;strokeColor=none;fillColor=none;fontColor=#FB923C;fontSize=25;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="979" y="412" width="133" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="p2_h_lbl" value="US household electricity"
-      style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=13;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="971" y="447" width="149" height="19" as="geometry"/>
-    </mxCell>
-
-    <!-- car -->
-    <mxCell id="p2_c_ico" value="🚗"
-      style="text;strokeColor=none;fillColor=none;fontSize=45;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="1234" y="346" width="64" height="64" as="geometry"/>
-    </mxCell>
-    <mxCell id="p2_c_num" value="112 cars"
-      style="text;strokeColor=none;fillColor=none;fontColor=#C084FC;fontSize=25;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="1208" y="412" width="133" height="35" as="geometry"/>
-    </mxCell>
-    <mxCell id="p2_c_lbl" value="driven 1 year (CO₂ equiv.)"
-      style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=13;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="1195" y="447" width="160" height="19" as="geometry"/>
-    </mxCell>
-
-    <!-- factory / CO2 banner -->
-    <mxCell id="p2_co2" value="🏭  552 metric tons CO₂ equivalent"
-      style="rounded=1;arcSize=50;fillColor=#450A0A;strokeColor=#EF4444;fontColor=#FCA5A5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="979" y="476" width="596" height="40" as="geometry"/>
-    </mxCell>
-
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <!--  PANEL 3  —  PER-QUERY ENERGY  (bottom left)          -->
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <mxCell id="p3_bg" value=""
-      style="rounded=1;fillColor=#1E293B;strokeColor=#334155;arcSize=2;"
-      vertex="1" parent="1">
-      <mxGeometry x="10" y="534" width="598" height="320" as="geometry"/>
-    </mxCell>
-
-    <mxCell id="p3_ttl" value="Energy Per Query"
-      style="text;strokeColor=none;fillColor=none;fontColor=#F1F5F9;fontSize=20;fontStyle=1;align=left;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="80" y="545" width="319" height="29" as="geometry"/>
-    </mxCell>
-    <mxCell id="p3_sttl" value="AI vs. Traditional Web Search"
-      style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=14;align=left;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="80" y="574" width="319" height="19" as="geometry"/>
-    </mxCell>
-
-    <!-- Google search icon + circle -->
-    <mxCell id="p3_g_ico" value="🔍"
-      style="text;strokeColor=none;fillColor=none;fontSize=31;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="43" y="604" width="43" height="43" as="geometry"/>
-    </mxCell>
-    <mxCell id="p3_g_lbl" value="Google Search"
-      style="text;strokeColor=none;fillColor=none;fontColor=#94A3B8;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="24" y="651" width="96" height="21" as="geometry"/>
-    </mxCell>
-    <mxCell id="p3_g_circ" value="0.04 Wh"
-      style="ellipse;fillColor=#16A34A;gradientColor=#15803D;gradientDirection=south;strokeColor=none;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="29" y="676" width="85" height="85" as="geometry"/>
-    </mxCell>
-
-    <!-- multiplier badge -->
-    <mxCell id="p3_mult" value="7.5x"
-      style="rounded=1;arcSize=50;fillColor=#6D28D9;gradientColor=#4C1D95;gradientDirection=south;strokeColor=none;fontColor=#FFFFFF;fontSize=31;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="197" y="700" width="106" height="59" as="geometry"/>
-    </mxCell>
-    <mxCell id="p3_more" value="more energy"
-      style="text;strokeColor=none;fillColor=none;fontColor=#94A3B8;fontSize=13;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="197" y="763" width="106" height="19" as="geometry"/>
-    </mxCell>
-
-    <!-- ChatGPT icon + large circle -->
-    <mxCell id="p3_ai_ico" value="🤖"
-      style="text;strokeColor=none;fillColor=none;fontSize=31;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="409" y="604" width="43" height="43" as="geometry"/>
-    </mxCell>
-    <mxCell id="p3_ai_lbl" value="ChatGPT (GPT-4)"
-      style="text;strokeColor=none;fillColor=none;fontColor=#94A3B8;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="370" y="651" width="138" height="21" as="geometry"/>
-    </mxCell>
-    <mxCell id="p3_ai_circ" value="0.30 Wh"
-      style="ellipse;fillColor=#EF4444;gradientColor=#B91C1C;gradientDirection=south;strokeColor=none;fontColor=#FFFFFF;fontSize=18;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="370" y="676" width="144" height="144" as="geometry"/>
-    </mxCell>
-
-    <!-- annual note -->
-    <mxCell id="p3_ann" value="⚡ Annual ChatGPT: ~227 GWh  =  20,000 US homes powered for a year"
-      style="text;strokeColor=none;fillColor=none;fontColor=#475569;fontSize=13;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="19" y="822" width="574" height="21" as="geometry"/>
-    </mxCell>
-
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <!--  PANEL 4  —  GROWTH TREND  (bottom right)             -->
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <mxCell id="p4_bg" value=""
-      style="rounded=1;fillColor=#1E293B;strokeColor=#334155;arcSize=2;"
-      vertex="1" parent="1">
-      <mxGeometry x="616" y="534" width="974" height="320" as="geometry"/>
-    </mxCell>
-
-    <mxCell id="p4_ico" value="📈"
-      style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="627" y="545" width="53" height="53" as="geometry"/>
-    </mxCell>
-    <mxCell id="p4_ttl" value="AI-Driven Growth: Where Are We Headed?"
-      style="text;strokeColor=none;fillColor=none;fontColor=#F1F5F9;fontSize=20;fontStyle=1;align=left;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="688" y="545" width="880" height="29" as="geometry"/>
-    </mxCell>
-    <mxCell id="p4_sttl" value="Global data center electricity demand trajectory"
-      style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=14;align=left;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="688" y="574" width="880" height="19" as="geometry"/>
-    </mxCell>
-
-    <!-- 2024 milestone -->
-    <mxCell id="y2024" value="2024&#xa;415 TWh&#xa;1.5% of global"
-      style="rounded=1;arcSize=8;fillColor=#EF4444;gradientColor=#B91C1C;gradientDirection=south;strokeColor=none;fontColor=#FFFFFF;fontSize=18;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="635" y="607" width="207" height="120" as="geometry"/>
-    </mxCell>
-
-    <!-- stats box -->
-    <mxCell id="p4_stats" value="🤖 AI servers: 30% / year&#xa;🖥️ Conventional: 9% / year&#xa;&#xa;Capacity doubling in 6 years"
-      style="rounded=1;arcSize=5;fillColor=#1C1917;strokeColor=#F59E0B;fontColor=#FDE68A;fontSize=15;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="947" y="617" width="300" height="93" as="geometry"/>
-    </mxCell>
-
-    <!-- arrows -->
-    <mxCell id="arr1" value=""
-      style="endArrow=block;endFill=1;strokeColor=#EF4444;strokeWidth=3;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;"
-      edge="1" parent="1" source="y2024" target="p4_stats">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-
-    <!-- 2030 milestone -->
-    <mxCell id="y2030" value="2030&#xa;945 TWh&#xa;~3% of global"
-      style="rounded=1;arcSize=8;fillColor=#C0392B;gradientColor=#7F1D1D;gradientDirection=south;strokeColor=none;fontColor=#FFFFFF;fontSize=18;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="1340" y="607" width="230" height="120" as="geometry"/>
-    </mxCell>
-
-    <mxCell id="arr2" value=""
-      style="endArrow=block;endFill=1;strokeColor=#C0392B;strokeWidth=3;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;"
-      edge="1" parent="1" source="p4_stats" target="y2030">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-
-    <!-- Japan badge -->
-    <mxCell id="japan" value="🇯🇵 = Japan's entire electricity grid"
-      style="rounded=1;arcSize=50;fillColor=#1C1917;strokeColor=#F97316;fontColor=#FED7AA;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="1280" y="745" width="290" height="29" as="geometry"/>
-    </mxCell>
-
-    <!-- AI rate badge -->
-    <mxCell id="airate" value="⚡ AI server demand grows 30x faster than the global grid"
-      style="rounded=1;arcSize=50;fillColor=#1C1917;strokeColor=#FBBF24;fontColor=#FDE68A;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="627" y="745" width="630" height="29" as="geometry"/>
-    </mxCell>
-
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <!--  SOURCES FOOTER                                        -->
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <mxCell id="sources" value="Sources: IEA Energy and AI Report 2024  |  Strubell et al. (2019)  |  S&amp;P Global  |  EESI Data Centers &amp; Water Consumption"
-      style="text;strokeColor=none;fillColor=none;fontColor=#334155;fontSize=13;align=center;verticalAlign=middle;"
-      vertex="1" parent="1">
-      <mxGeometry x="10" y="865" width="1570" height="21" as="geometry"/>
-    </mxCell>
-
-  </root>
-</mxGraphModel>
+    <mxGraphModel dx="1426" dy="912" grid="0" gridSize="8" guides="1" tooltips="1" connect="0" arrows="1" fold="0" page="0" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="canvas_bg" parent="1" style="fillColor=#0F172A;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="900" width="1600" as="geometry" />
+        </mxCell>
+        <mxCell id="header" parent="1" style="rounded=0;fillColor=#1D4ED8;gradientColor=#7C3AED;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=27;fontStyle=1;align=center;verticalAlign=middle;" value="THE ENERGY FOOTPRINT OF AI &amp; DATA CENTERS" vertex="1">
+          <mxGeometry height="72" width="1600" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_sub" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#A5B4FC;fontSize=14;align=center;verticalAlign=middle;" value="Scale, Cost, and Growth of Computing Power Consumption" vertex="1">
+          <mxGeometry height="24" width="1600" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_bg" parent="1" style="rounded=1;fillColor=#1E293B;strokeColor=#334155;arcSize=2;" value="" vertex="1">
+          <mxGeometry height="444" width="945" x="10" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_ico" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;" value="🌍" vertex="1">
+          <mxGeometry height="53" width="53" x="24" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_ttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#F1F5F9;fontSize=41;fontStyle=1;align=left;verticalAlign=middle;" value="Annual Electricity Consumption" vertex="1">
+          <mxGeometry height="29" width="452" x="85" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ico_dc24" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;" value="🏢" vertex="1">
+          <mxGeometry height="35" width="32" x="75" y="152" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_dc24" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FCA5A5;fontSize=18;fontStyle=1;align=right;verticalAlign=middle;" value="Data Centers 2024" vertex="1">
+          <mxGeometry height="35" width="226" x="101" y="152" as="geometry" />
+        </mxCell>
+        <mxCell id="bar_dc24" parent="1" style="rounded=1;arcSize=50;fillColor=#EF4444;gradientColor=#B91C1C;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=left;spacingLeft=10;verticalAlign=middle;" value="415 TWh" vertex="1">
+          <mxGeometry height="35" width="293" x="412" y="152" as="geometry" />
+        </mxCell>
+        <mxCell id="ico_dc30" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;" value="📈" vertex="1">
+          <mxGeometry height="35" width="32" x="75" y="197" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_dc30" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FCA5A5;fontSize=18;fontStyle=3;align=right;verticalAlign=middle;" value="Data Centers 2030 ↗" vertex="1">
+          <mxGeometry height="35" width="226" x="114" y="197" as="geometry" />
+        </mxCell>
+        <mxCell id="bar_dc30" parent="1" style="rounded=1;arcSize=50;fillColor=none;strokeColor=#EF4444;fontColor=#FCA5A5;fontSize=18;fontStyle=3;align=left;spacingLeft=10;verticalAlign=middle;dashed=1;" value="945 TWh  (projected — capacity nearly doubles)" vertex="1">
+          <mxGeometry height="35" width="488.5" x="346.5" y="197" as="geometry" />
+        </mxCell>
+        <mxCell id="bar_sep" parent="1" style="line;strokeColor=#334155;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="4" width="922" x="19" y="242" as="geometry" />
+        </mxCell>
+        <mxCell id="4AN2jQ8W1nbNqMNNzbwf-1" edge="1" parent="1" source="ico_fr" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="lbl_dc30" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ico_fr" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;" value="🇫🇷" vertex="1">
+          <mxGeometry height="35" width="32" x="75" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_fr" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#CBD5E1;fontSize=18;align=right;verticalAlign=middle;" value="France" vertex="1">
+          <mxGeometry height="35" width="226" x="53" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="bar_fr" parent="1" style="rounded=1;arcSize=50;fillColor=#3B82F6;gradientColor=#1D4ED8;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=18;align=left;spacingLeft=10;verticalAlign=top;" value="430 TWh" vertex="1">
+          <mxGeometry height="35" width="303" x="345" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="ico_uk" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;" value="🇬🇧" vertex="1">
+          <mxGeometry height="35" width="32" x="75" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_uk" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#CBD5E1;fontSize=18;align=right;verticalAlign=middle;" value="United Kingdom" vertex="1">
+          <mxGeometry height="35" width="226" x="53" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="bar_uk" parent="1" style="rounded=1;arcSize=50;fillColor=#3B82F6;gradientColor=#1D4ED8;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=18;align=left;spacingLeft=10;verticalAlign=top;" value="300 TWh" vertex="1">
+          <mxGeometry height="35" width="211" x="345" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="ico_se" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;" value="🇸🇪" vertex="1">
+          <mxGeometry height="35" width="32" x="75" y="346" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_se" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#CBD5E1;fontSize=18;align=right;verticalAlign=middle;" value="Sweden" vertex="1">
+          <mxGeometry height="35" width="226" x="53" y="346" as="geometry" />
+        </mxCell>
+        <mxCell id="bar_se" parent="1" style="rounded=1;arcSize=50;fillColor=#3B82F6;gradientColor=#1D4ED8;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=18;align=left;spacingLeft=10;verticalAlign=top;" value="140 TWh" vertex="1">
+          <mxGeometry height="35" width="98" x="345" y="346" as="geometry" />
+        </mxCell>
+        <mxCell id="ico_ar" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;" value="🇦🇷" vertex="1">
+          <mxGeometry height="35" width="32" x="75" y="391" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_ar" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#CBD5E1;fontSize=18;align=right;verticalAlign=middle;" value="Argentina" vertex="1">
+          <mxGeometry height="35" width="226" x="53" y="391" as="geometry" />
+        </mxCell>
+        <mxCell id="bar_ar" parent="1" style="rounded=1;arcSize=50;fillColor=#3B82F6;gradientColor=#1D4ED8;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=18;align=left;spacingLeft=10;verticalAlign=top;" value="130 TWh" vertex="1">
+          <mxGeometry height="35" width="92" x="345" y="391" as="geometry" />
+        </mxCell>
+        <mxCell id="ico_nl" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;" value="🇳🇱" vertex="1">
+          <mxGeometry height="35" width="32" x="75" y="436" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_nl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#CBD5E1;fontSize=18;align=right;verticalAlign=middle;" value="Netherlands" vertex="1">
+          <mxGeometry height="35" width="226" x="53" y="436" as="geometry" />
+        </mxCell>
+        <mxCell id="bar_nl" parent="1" style="rounded=1;arcSize=50;fillColor=#3B82F6;gradientColor=#1D4ED8;gradientDirection=east;strokeColor=none;fontColor=#FFFFFF;fontSize=18;align=left;spacingLeft=10;verticalAlign=top;" value="120 TWh" vertex="1">
+          <mxGeometry height="35" width="85" x="345" y="436" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_badge1" parent="1" style="rounded=1;arcSize=50;fillColor=#4C1D95;gradientColor=#6D28D9;gradientDirection=east;strokeColor=none;fontColor=#DDD6FE;fontSize=21;fontStyle=1;align=center;verticalAlign=middle;" value="Data Centers ≈ France&#39;s entire grid" vertex="1">
+          <mxGeometry height="29" width="372" x="19" y="487" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_badge2" parent="1" style="rounded=1;arcSize=50;fillColor=#134E4A;gradientColor=#0F766E;gradientDirection=east;strokeColor=none;fontColor=#99F6E4;fontSize=21;fontStyle=1;align=center;verticalAlign=middle;" value="1.5% of global electricity now → ~3% by 2030" vertex="1">
+          <mxGeometry height="29" width="545" x="404" y="487" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_bg" parent="1" style="rounded=1;fillColor=#1E293B;strokeColor=#334155;arcSize=2;" value="" vertex="1">
+          <mxGeometry height="444" width="627" x="963" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_ico" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;" value="🤖" vertex="1">
+          <mxGeometry height="53" width="53" x="979" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_ttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#F1F5F9;fontSize=20;fontStyle=1;align=left;verticalAlign=middle;" value="Training ONE Large AI Model" vertex="1">
+          <mxGeometry height="29" width="532" x="1040" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_sttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=14;align=left;verticalAlign=middle;" value="GPT-3: True environmental cost of a single training run" vertex="1">
+          <mxGeometry height="19" width="532" x="1040" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_e_ico" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=56;align=center;verticalAlign=middle;" value="⚡" vertex="1">
+          <mxGeometry height="74" width="74" x="1061" y="157" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_e_num" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FDE68A;fontSize=34;fontStyle=1;align=center;verticalAlign=middle;" value="1,287 MWh" vertex="1">
+          <mxGeometry height="45" width="319" x="979" y="234" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_e_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=14;align=center;verticalAlign=middle;" value="Electricity consumed in one training run" vertex="1">
+          <mxGeometry height="21" width="319" x="979" y="279" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_divline" parent="1" style="line;strokeColor=#334155;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="4" width="596" x="979" y="311" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_eq" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#475569;fontSize=13;fontStyle=1;align=center;verticalAlign=middle;" value="THIS EQUALS" vertex="1">
+          <mxGeometry height="19" width="596" x="979" y="319" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_h_ico" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=45;align=center;verticalAlign=middle;" value="🏠" vertex="1">
+          <mxGeometry height="64" width="64" x="1000" y="346" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_h_num" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FB923C;fontSize=25;fontStyle=1;align=center;verticalAlign=middle;" value="120 years" vertex="1">
+          <mxGeometry height="35" width="133" x="979" y="412" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_h_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=13;align=center;verticalAlign=middle;" value="US household electricity" vertex="1">
+          <mxGeometry height="19" width="149" x="971" y="447" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_c_ico" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=45;align=center;verticalAlign=middle;" value="🚗" vertex="1">
+          <mxGeometry height="64" width="64" x="1234" y="346" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_c_num" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#C084FC;fontSize=25;fontStyle=1;align=center;verticalAlign=middle;" value="112 cars" vertex="1">
+          <mxGeometry height="35" width="133" x="1208" y="412" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_c_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=13;align=center;verticalAlign=middle;" value="driven 1 year (CO₂ equiv.)" vertex="1">
+          <mxGeometry height="19" width="160" x="1195" y="447" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_co2" parent="1" style="rounded=1;arcSize=50;fillColor=#450A0A;strokeColor=#EF4444;fontColor=#FCA5A5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" value="🏭  552 metric tons CO₂ equivalent" vertex="1">
+          <mxGeometry height="40" width="596" x="979" y="476" as="geometry" />
+        </mxCell>
+        <mxCell id="p3_bg" parent="1" style="rounded=1;fillColor=#1E293B;strokeColor=#334155;arcSize=2;" value="" vertex="1">
+          <mxGeometry height="320" width="598" x="10" y="534" as="geometry" />
+        </mxCell>
+        <mxCell id="p3_ttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#F1F5F9;fontSize=41;fontStyle=1;align=left;verticalAlign=middle;" value="Energy Per Query" vertex="1">
+          <mxGeometry height="29" width="319" x="80" y="545" as="geometry" />
+        </mxCell>
+        <mxCell id="p3_sttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=26;align=left;verticalAlign=middle;" value="AI vs. Traditional Web Search" vertex="1">
+          <mxGeometry height="19" width="319" x="80" y="594" as="geometry" />
+        </mxCell>
+        <mxCell id="p3_g_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#94A3B8;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" value="Google Search" vertex="1">
+          <mxGeometry height="21" width="96" x="24" y="651" as="geometry" />
+        </mxCell>
+        <mxCell id="p3_g_circ" parent="1" style="ellipse;fillColor=#16A34A;gradientColor=#15803D;gradientDirection=south;strokeColor=none;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" value="0.04 Wh" vertex="1">
+          <mxGeometry height="85" width="85" x="29" y="676" as="geometry" />
+        </mxCell>
+        <mxCell id="p3_mult" parent="1" style="rounded=1;arcSize=50;fillColor=#6D28D9;gradientColor=#4C1D95;gradientDirection=south;strokeColor=none;fontColor=#FFFFFF;fontSize=31;fontStyle=1;align=center;verticalAlign=middle;" value="7.5x" vertex="1">
+          <mxGeometry height="59" width="106" x="197" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="p3_more" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#94A3B8;fontSize=13;align=center;verticalAlign=middle;" value="more energy" vertex="1">
+          <mxGeometry height="19" width="106" x="197" y="763" as="geometry" />
+        </mxCell>
+        <mxCell id="p3_ai_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#94A3B8;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" value="ChatGPT (GPT-4)" vertex="1">
+          <mxGeometry height="21" width="138" x="370" y="651" as="geometry" />
+        </mxCell>
+        <mxCell id="p3_ai_circ" parent="1" style="ellipse;fillColor=#EF4444;gradientColor=#B91C1C;gradientDirection=south;strokeColor=none;fontColor=#FFFFFF;fontSize=18;fontStyle=1;align=center;verticalAlign=middle;" value="0.30 Wh" vertex="1">
+          <mxGeometry height="144" width="144" x="370" y="676" as="geometry" />
+        </mxCell>
+        <mxCell id="p3_ann" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FFFFFF;fontSize=18;align=center;verticalAlign=middle;" value=" Annual ChatGPT: ~227 GWh  =  20,000 US homes powered for a year" vertex="1">
+          <mxGeometry height="21" width="574" x="19" y="822" as="geometry" />
+        </mxCell>
+        <mxCell id="p4_bg" parent="1" style="rounded=1;fillColor=#1E293B;strokeColor=#334155;arcSize=2;" value="" vertex="1">
+          <mxGeometry height="320" width="974" x="616" y="534" as="geometry" />
+        </mxCell>
+        <mxCell id="p4_ico" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=42;align=center;verticalAlign=middle;" value="📈" vertex="1">
+          <mxGeometry height="53" width="53" x="627" y="545" as="geometry" />
+        </mxCell>
+        <mxCell id="p4_ttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#F1F5F9;fontSize=41;fontStyle=1;align=left;verticalAlign=middle;" value="AI-Driven Growth: Where Are We Headed?" vertex="1">
+          <mxGeometry height="58" width="880" x="683" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="y2024" parent="1" style="rounded=1;arcSize=8;fillColor=#EF4444;gradientColor=#B91C1C;gradientDirection=south;strokeColor=none;fontColor=#FFFFFF;fontSize=24;fontStyle=1;align=center;verticalAlign=middle;" value="2024&#xa;415 TWh&#xa;1.5% of global" vertex="1">
+          <mxGeometry height="120" width="207" x="635" y="607" as="geometry" />
+        </mxCell>
+        <mxCell id="p4_stats" parent="1" style="rounded=1;arcSize=5;fillColor=#1C1917;strokeColor=#F59E0B;fontColor=#FDE68A;fontSize=20;align=center;verticalAlign=middle;" value=" AI servers: 30% / year&#xa;Conventional: 9% / year&#xa;Capacity doubling in 6 years" vertex="1">
+          <mxGeometry height="90" width="300" x="947" y="622" as="geometry" />
+        </mxCell>
+        <mxCell id="arr1" edge="1" parent="1" source="y2024" style="endArrow=block;endFill=1;strokeColor=#EF4444;strokeWidth=3;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="p4_stats" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="y2030" parent="1" style="rounded=1;arcSize=8;fillColor=#C0392B;gradientColor=#7F1D1D;gradientDirection=south;strokeColor=none;fontColor=#FFFFFF;fontSize=24;fontStyle=1;align=center;verticalAlign=middle;" value="2030&#xa;945 TWh&#xa;~3% of global" vertex="1">
+          <mxGeometry height="120" width="230" x="1340" y="607" as="geometry" />
+        </mxCell>
+        <mxCell id="arr2" edge="1" parent="1" source="p4_stats" style="endArrow=block;endFill=1;strokeColor=#C0392B;strokeWidth=3;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="y2030" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="japan" parent="1" style="rounded=1;arcSize=50;fillColor=#1C1917;strokeColor=#F97316;fontColor=#FED7AA;fontSize=18;fontStyle=1;align=center;verticalAlign=middle;" value="🇯🇵 = Japan&#39;s entire electricity grid" vertex="1">
+          <mxGeometry height="29" width="315" x="1269" y="745" as="geometry" />
+        </mxCell>
+        <mxCell id="airate" parent="1" style="rounded=1;arcSize=50;fillColor=#1C1917;strokeColor=#FBBF24;fontColor=#FDE68A;fontSize=18;fontStyle=1;align=center;verticalAlign=middle;" value="⚡ AI server demand grows 30x faster than the global grid" vertex="1">
+          <mxGeometry height="29" width="586" x="627" y="745" as="geometry" />
+        </mxCell>
+        <mxCell id="sources" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#334155;fontSize=13;align=center;verticalAlign=middle;" value="Sources: IEA Energy and AI Report 2024  |  Strubell et al. (2019)  |  S&amp;P Global  |  EESI Data Centers &amp; Water Consumption" vertex="1">
+          <mxGeometry height="21" width="1570" x="10" y="865" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
   </diagram>
 </mxfile>

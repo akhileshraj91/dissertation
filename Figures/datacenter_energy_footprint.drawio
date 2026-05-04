@@ -106,7 +106,7 @@
         <mxCell id="p2_ttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#F1F5F9;fontSize=20;fontStyle=1;align=left;verticalAlign=middle;" value="Training ONE Large AI Model" vertex="1">
           <mxGeometry height="29" width="532" x="1040" y="90" as="geometry" />
         </mxCell>
-        <mxCell id="p2_sttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=14;align=left;verticalAlign=middle;" value="GPT-3: True environmental cost of a single training run" vertex="1">
+        <mxCell id="p2_sttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FFFFFF;fontSize=17;align=left;verticalAlign=middle;" value="GPT-3: True environmental cost of a single training run" vertex="1">
           <mxGeometry height="19" width="532" x="1040" y="120" as="geometry" />
         </mxCell>
         <mxCell id="p2_e_ico" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=56;align=center;verticalAlign=middle;" value="⚡" vertex="1">
@@ -115,32 +115,32 @@
         <mxCell id="p2_e_num" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FDE68A;fontSize=34;fontStyle=1;align=center;verticalAlign=middle;" value="1,287 MWh" vertex="1">
           <mxGeometry height="45" width="319" x="979" y="234" as="geometry" />
         </mxCell>
-        <mxCell id="p2_e_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=14;align=center;verticalAlign=middle;" value="Electricity consumed in one training run" vertex="1">
+        <mxCell id="p2_e_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FFFFFF;fontSize=16;align=center;verticalAlign=middle;" value="Electricity consumed in one training run" vertex="1">
           <mxGeometry height="21" width="319" x="979" y="279" as="geometry" />
         </mxCell>
         <mxCell id="p2_divline" parent="1" style="line;strokeColor=#334155;fillColor=none;" value="" vertex="1">
           <mxGeometry height="4" width="596" x="979" y="311" as="geometry" />
         </mxCell>
-        <mxCell id="p2_eq" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#475569;fontSize=13;fontStyle=1;align=center;verticalAlign=middle;" value="THIS EQUALS" vertex="1">
+        <mxCell id="p2_eq" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FFFFFF;fontSize=22;fontStyle=1;align=center;verticalAlign=middle;" value="Equivalent to:" vertex="1">
           <mxGeometry height="19" width="596" x="979" y="319" as="geometry" />
         </mxCell>
         <mxCell id="p2_h_ico" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=45;align=center;verticalAlign=middle;" value="🏠" vertex="1">
-          <mxGeometry height="64" width="64" x="1000" y="346" as="geometry" />
+          <mxGeometry height="89" width="89" x="1052.5" y="325" as="geometry" />
         </mxCell>
         <mxCell id="p2_h_num" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FB923C;fontSize=25;fontStyle=1;align=center;verticalAlign=middle;" value="120 years" vertex="1">
-          <mxGeometry height="35" width="133" x="979" y="412" as="geometry" />
+          <mxGeometry height="35" width="133" x="1030.5" y="408" as="geometry" />
         </mxCell>
-        <mxCell id="p2_h_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=13;align=center;verticalAlign=middle;" value="US household electricity" vertex="1">
-          <mxGeometry height="19" width="149" x="971" y="447" as="geometry" />
+        <mxCell id="p2_h_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FFFFFF;fontSize=18;align=center;verticalAlign=middle;" value="US household electricity" vertex="1">
+          <mxGeometry height="19" width="149" x="1022.5" y="447" as="geometry" />
         </mxCell>
         <mxCell id="p2_c_ico" parent="1" style="text;strokeColor=none;fillColor=none;fontSize=45;align=center;verticalAlign=middle;" value="🚗" vertex="1">
-          <mxGeometry height="64" width="64" x="1234" y="346" as="geometry" />
+          <mxGeometry height="73" width="90" x="1284" y="327" as="geometry" />
         </mxCell>
         <mxCell id="p2_c_num" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#C084FC;fontSize=25;fontStyle=1;align=center;verticalAlign=middle;" value="112 cars" vertex="1">
-          <mxGeometry height="35" width="133" x="1208" y="412" as="geometry" />
+          <mxGeometry height="35" width="133" x="1262.5" y="408" as="geometry" />
         </mxCell>
-        <mxCell id="p2_c_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=13;align=center;verticalAlign=middle;" value="driven 1 year (CO₂ equiv.)" vertex="1">
-          <mxGeometry height="19" width="160" x="1195" y="447" as="geometry" />
+        <mxCell id="p2_c_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FFFFFF;fontSize=18;align=center;verticalAlign=middle;" value="driven 1 year (CO₂ equiv.)" vertex="1">
+          <mxGeometry height="19" width="160" x="1251" y="447" as="geometry" />
         </mxCell>
         <mxCell id="p2_co2" parent="1" style="rounded=1;arcSize=50;fillColor=#450A0A;strokeColor=#EF4444;fontColor=#FCA5A5;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" value="🏭  552 metric tons CO₂ equivalent" vertex="1">
           <mxGeometry height="40" width="596" x="979" y="476" as="geometry" />
@@ -151,7 +151,7 @@
         <mxCell id="p3_ttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#F1F5F9;fontSize=41;fontStyle=1;align=left;verticalAlign=middle;" value="Energy Per Query" vertex="1">
           <mxGeometry height="29" width="319" x="80" y="545" as="geometry" />
         </mxCell>
-        <mxCell id="p3_sttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#64748B;fontSize=26;align=left;verticalAlign=middle;" value="AI vs. Traditional Web Search" vertex="1">
+        <mxCell id="p3_sttl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FFFFFF;fontSize=26;align=left;verticalAlign=middle;" value="AI vs. Traditional Web Search" vertex="1">
           <mxGeometry height="19" width="319" x="80" y="594" as="geometry" />
         </mxCell>
         <mxCell id="p3_g_lbl" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#94A3B8;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" value="Google Search" vertex="1">
@@ -205,7 +205,7 @@
         <mxCell id="airate" parent="1" style="rounded=1;arcSize=50;fillColor=#1C1917;strokeColor=#FBBF24;fontColor=#FDE68A;fontSize=18;fontStyle=1;align=center;verticalAlign=middle;" value="⚡ AI server demand grows 30x faster than the global grid" vertex="1">
           <mxGeometry height="29" width="586" x="627" y="745" as="geometry" />
         </mxCell>
-        <mxCell id="sources" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#334155;fontSize=13;align=center;verticalAlign=middle;" value="Sources: IEA Energy and AI Report 2024  |  Strubell et al. (2019)  |  S&amp;P Global  |  EESI Data Centers &amp; Water Consumption" vertex="1">
+        <mxCell id="sources" parent="1" style="text;strokeColor=none;fillColor=none;fontColor=#FFFFFF;fontSize=13;align=center;verticalAlign=middle;" value="Sources: IEA Energy and AI Report 2024  |  Strubell et al. (2019)  |  S&amp;P Global  |  EESI Data Centers &amp; Water Consumption" vertex="1">
           <mxGeometry height="21" width="1570" x="10" y="865" as="geometry" />
         </mxCell>
       </root>
