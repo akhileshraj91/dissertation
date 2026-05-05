@@ -1,5 +1,5 @@
 \vspace{-0.2cm}
-\section{Background}\label{sec:Background}
+\section{Background}\label{ch4:sec:Background}
 This section offers an overview of the concepts and technologies employed in this paper.
 % \vspace{-3cm}
 \subsection{Offline Reinforcement Learning}
@@ -126,7 +126,7 @@ where $s_t,a_t$ represent, respectively, the present state and  action, $\mathbb
 % \end{figure*}
 % \vspace{-0.1cm}
 
-\subsection{Measuring Application Performance through Hardware Performance Counters} \label{subsec:Applications_vs_perf}
+\subsection{Measuring Application Performance through Hardware Performance Counters} \label{ch4:bg:subsec:Applications_vs_perf}
 
 % Akhilesh, I added this sentence otherwise there was no justification why  we are doing this
 Training the offline models as suggested above requires a dataset of application performance
@@ -165,8 +165,8 @@ To optimize energy efficiency while preserving performance, we focus on a small 
 %     \Description{The relationship between other PAPI measurements usage with varying input power.}
 % \end{figure}
 
-%\subsection{Application-aware Performance Measurement} \label{subsec:Performance_Measurement}
-\subsection{Capturing Application Progress in the Dataset} \label{subsec:Performance_Measurement}
+%\subsection{Application-aware Performance Measurement} \label{ch4:bg:subsec:Performance_Measurement}
+\subsection{Capturing Application Progress in the Dataset} \label{ch4:bg:subsec:Performance_Measurement}
 % Akhilesh, our work is application-agnostic. But the above heading will raise eyebrows. How do we reconcile this contradiction? IN other words, how can we claim that by doing application-aware measurements we can do application-agnostic power optimization?
 % Akhilesh, I changed the heading above
 
@@ -182,7 +182,7 @@ We redefine the progress measurement equation introduced in~\cite{ramesh2019unde
 \begin{aligned}
 progress(t_i) = \underset{\forall k,t_k \in [t_{i-1},t_i]}{\text{median}}\bigg(\frac{N}{t_k-t_{k-1}} \bigg),
 \end{aligned}
-\label{eq:progress-calculation}
+\label{ch4:bg:eq:progress-calculation}
 \end{equation}
 where $N$ represents the number of heartbeats received between the time instants
 $t_k$ and $t_{k-1}$. This measure of
@@ -204,7 +204,7 @@ counter to our data collection and control infrastructure.
 %%\begin{table*}[htb]
 %%    \centering
 %%    \caption{Detailed description of our benchmarks, including their type, parameters, and average performance metrics when running without a power cap.}
-%%    \label{tab:performance_metrics}
+%%    \label{ch4:tab:performance_metrics}
 %%    \resizebox{\linewidth}{!}{%
 %%        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 %%            \hline
@@ -272,4 +272,4 @@ counter to our data collection and control infrastructure.
 %%% The $IPC$, $STL$, and $CMR$ values collectively constitute a distinctive vector, serving as a "fingerprint" of the application given the specific $PCAP$. Notably, the relation of performance counter metrics to $PCAP$ differs from the application's "progress" as seen in Figure \ref{fig:motivation_fig}.
 %%% This observation underscores the insights of Ramesh et al. \cite{ramesh2019understanding}, highlighting the significance of measuring application progress towards achieving scientific objectives.
 %%We modified these benchmarks to become iterative in nature, so that application progress is more easily identifiable: when not already a part of the benchmark, an outer loop is introduced, repeating their kernels a configurable amount of time. Each outer loop also contains our instrumentation for heartbeats, resulting in each  benchmark reporting one heartbeat per iteration. Note, the progress rate of each benchmark is different and depends on the runtime of its kernel.
-%%% Table \ref{tab:performance_metrics} shows the names and associated characteristics of the applications we consider in this paper for a quick reference. 
+%%% Table \ref{ch4:tab:performance_metrics} shows the names and associated characteristics of the applications we consider in this paper for a quick reference. 

@@ -1,4 +1,4 @@
-\section{Introduction}\label{sec:Introduction}
+\section{Introduction}\label{ch4:sec:Introduction}
 
 \iffalse 
 As the energy consumption of computing continues to grow, with exascale systems
@@ -49,7 +49,7 @@ impact of hardware power management strategies on that performance.
         % \end{scope}
     \end{tikzpicture}
     \vspace{-0.7cm}
-    \caption{{Power vs instantaneous performance (progress) for the \texttt{stream-full} benchmark on an Intel Cascadelake node. Progress, defined in Eq.~\eqref{eq:progress-calculation}, is a proxy for the instantaneous performance of an application toward its scientific objective.}}
+    \caption{{Power vs instantaneous performance (progress) for the \texttt{stream-full} benchmark on an Intel Cascadelake node. Progress, defined in Eq.~\eqref{ch4:eq:progress-calculation}, is a proxy for the instantaneous performance of an application toward its scientific objective.}}
     \label{fig:motivation_fig}
 %    \Description{Motivating example}
 \end{figure}
@@ -130,9 +130,9 @@ Note that although this work illustrates control design for multisocket CPU-only
 % For example, an overprovisioned system could use system-wide power management to allocate available power to new resources, while using a controller such as ours to regulate the power consumption of allocated nodes.
 
 The remainder of this paper is structured as follows: 
-In Section~\ref{sec:Related} we provide background material and review existing algorithms in power and performance optimization. 
-%Section~\ref{sec:Background} presents the necessary background for this paper, including the RL algorithm, %hardware and software stacks, and packages used in the experiments. 
-Section~\ref{sec:Problem} formulates the problem. 
-Section ~\ref{sec:Methodology} outlines the proposed algorithm and workflow in the context of compute nodes. Section~\ref{sec:setup} presents the experimental setup used in both training and evaluations. 
+In Section~\ref{ch4:sec:Related} we provide background material and review existing algorithms in power and performance optimization. 
+%Section~\ref{ch4:sec:Background} presents the necessary background for this paper, including the RL algorithm, %hardware and software stacks, and packages used in the experiments. 
+Section~\ref{ch4:sec:Problem} formulates the problem. 
+Section ~\ref{ch4:sec:Methodology} outlines the proposed algorithm and workflow in the context of compute nodes. Section~\ref{sec:setup} presents the experimental setup used in both training and evaluations. 
 In Section~\ref{sec:Results} we present the experimental design and implementation, along with the results and analysis. 
-Finally, Section ~\ref{sec:Conclusion} provides  a brief summary, the impact of this work, and future opportunities. 
+Finally, Section ~\ref{ch4:sec:Conclusion} provides  a brief summary, the impact of this work, and future opportunities. 

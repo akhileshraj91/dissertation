@@ -1,18 +1,18 @@
-\section{Methodology}\label{sec:Methodology}
+\section{Methodology}\label{ch4:sec:Methodology}
 
 
-This section describes the methods, beginning with data collection, followed by the training of the RL-agent and the deployment of the algorithm. To the best of our knowledge, this paper is the first to use an offline RL to train an agent to dynamically regulate the power of a datacenter/HPC cluster node. The different phases of the approach are depicted pictorially in Figure~\ref{fig:flow-diagram}. As shown in the figure, there are no closed loops between the RL agent and the evaluation process, meaning the agent is trained without feedback from direct interaction with the target system.
+This section describes the methods, beginning with data collection, followed by the training of the RL-agent and the deployment of the algorithm. To the best of our knowledge, this paper is the first to use an offline RL to train an agent to dynamically regulate the power of a datacenter/HPC cluster node. The different phases of the approach are depicted pictorially in Figure~\ref{ch4:fig:flow-diagram}. As shown in the figure, there are no closed loops between the RL agent and the evaluation process, meaning the agent is trained without feedback from direct interaction with the target system.
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=.9\linewidth,trim=5.5cm 6cm 3cm 1cm]{Figures/block_diagram.pdf}
     \caption{{Flow diagram for offline reinforcement learning: data is collected using an arbitrary policy to train the agent without system  , and the trained agent is later deployed for evaluation. Note that the lines in the diagram are not closed to form a loop, indicating offline training and online testing.}}
-    \label{fig:flow-diagram}
+    \label{ch4:fig:flow-diagram}
 %    \Description{Flow diagram of methodology}
 \end{figure}
 
 % Akhilesh, moved this subsection from Background to here and gave it a specific subheading
-\subsection{Dataset Collection: Capturing Application Performance through Hardware Performance Counters} \label{subsec:Applications_vs_perf}
+\subsection{Dataset Collection: Capturing Application Performance through Hardware Performance Counters} \label{ch4:subsec:Applications_vs_perf}
 
 Unlike existing works \cite{10305814} that use a mathematical model to describe the relationship between application performance and power for training an RL agent, our approach learns directly from a collected dataset, which consists of performance and power data. By analyzing a set of pre-collected data, the RL agent aims to improve decision-making processes and optimize performance over the course of training iterations. 
 
@@ -29,37 +29,37 @@ To optimize energy efficiency while preserving performance, we focus on a small 
 \textbf{Key Insight:} Based on findings from previous works, we note that these metrics should not be viewed in isolation as definitive indicators of performance, since varying IPC values, for example, can still lead to the same execution time. Nonetheless, these derived metrics serve as valuable proxies to discern application characteristics, including its arithmetic intensity or whether the application is memory-bounded and thus can operate efficiently within a lower power budget.
 
 % Benchmark applications are widely used to evaluate and rank system performance. They are also important in understanding how the computations can scale with the changes in number of nodes/ cores thereby using the appropriate setup for future experiments. For example, one of the applications that we use for our experiments, the STREAM benchmark, \cite{mccalpin1995memory} is designed to understand the effect of memory bandwidth on performance. It consists of four kernels namely add, copy, scale and triad (a combination of remaining three kernels), constantly querying the memory for the assigned operation with a query size equivalent to the problem size given as input. The latency of this execution depends on the time it takes for the application to retrieve this information from the memory and can be accumulate over iterated execution of the same process. Similarly there are compute bound benchmark applications, such as NAS Parallel benchmark applications (NAS) \cite{10.1145/125826.125925}, that are limited in performance by the CPU frequency. We use six of the eight benchmark applications (remaining two are used in testing) with carefully chosen problem size, enough to saturate the CPU and memory, for data collection and evaluation. Each kernel takes a finite but shorter run time for its execution. This execution time is not sufficient to capture the latency imposed by the memory bandwidth. Therefore we add iterations to each of these kernels to sustain the queries of the CPU on memory thereby accumulating the latency. This will be reflected on the total execution time of each of the application and also on the corresponding performance counter measurements. \todo{badly explained, needs rework}
-% Table \ref{tab:performance_metrics} presents the characteristics of various benchmark applications used throughout this paper. We include the problem size, iterations, average $IPC$, average $CMR$, average $STL$, average $progress$ and average execution time ($ET$) for each kernel, calculated over 10 independent runs. 
-% We use these features mentioned in the Table \ref{tab:performance_metrics} as the runtime characteristics of the application running on a node which goes into the state definition. The power supplied to the node is regulated using the power cap parameter, $PCAP(t)$. The allowed values of $PCAP(t)$ varies with hardware architecture. 
+% Table \ref{ch4:tab:performance_metrics} presents the characteristics of various benchmark applications used throughout this paper. We include the problem size, iterations, average $IPC$, average $CMR$, average $STL$, average $progress$ and average execution time ($ET$) for each kernel, calculated over 10 independent runs. 
+% We use these features mentioned in the Table \ref{ch4:tab:performance_metrics} as the runtime characteristics of the application running on a node which goes into the state definition. The power supplied to the node is regulated using the power cap parameter, $PCAP(t)$. The allowed values of $PCAP(t)$ varies with hardware architecture. 
 % Moving to the experimental setup
 
 % 
 %%%%%%%%%%%%%%%%
 
 % Akhilesh, this was the second subsection from Background that I moved here. 
-\subsection{Augmenting the Dataset with Application Progress} \label{subsec:Performance_Measurement}
+\subsection{Augmenting the Dataset with Application Progress} \label{ch4:subsec:Performance_Measurement}
 To train the RL model, we must define the observables that constitute the states. In our case, we represent one aspect of the state of the RL agent related to application behavior, which is identified through hardware performance counters using the data collection steps shown above. Additionally, the instantaneous performance of the application and useful work it does, measured through application instrumentation, and the ongoing power consumption are also integral to the state. These characteristics can vary across applications.
-%and can be visualized by using the values provided in Table~\ref{tab:performance_metrics}.
+%and can be visualized by using the values provided in Table~\ref{ch4:tab:performance_metrics}.
 
 We augment our monitoring of application behavior by adding a notion of application \textit{progress}, or \textit{heartbeats}, to our system. This measure is obtained by a lightweight instrumentation of the applications under study.  Our approach follows the work of Ramesh et al.~\cite{ramesh2019understanding} and follows the instrumentation steps outlined by Cerf et al.~\cite{cerf2021sustaining}.
 The role of this progress measurement is to highlight the potential for an application to be busy-waiting for some resource in the system and thus be showing up as being active but in reality is not making useful use of compute power.
 
-We redefine the progress measurement equation introduced in~\cite{ramesh2019understanding} by considering the number of heartbeats received between two sampling (control) instants. The progress at time instant $t_i$ is given by Equation~\eqref{eq:progress-calculation}:
+We redefine the progress measurement equation introduced in~\cite{ramesh2019understanding} by considering the number of heartbeats received between two sampling (control) instants. The progress at time instant $t_i$ is given by Equation~\eqref{ch4:eq:progress-calculation}:
 
 \begin{equation}
 \begin{aligned}
 progress(t_i) = \underset{\forall k,t_k \in [t_{i-1},t_i]}{\text{median}}\bigg(\frac{N}{t_k-t_{k-1}} \bigg),
 \end{aligned}
-\label{eq:progress-calculation}
+\label{ch4:eq:progress-calculation}
 \end{equation}
 where $N$ represents the number of heartbeats received between the time instants
 $t_k$ and $t_{k-1}$. This measure of
 progress can be understood as a proxy for monitoring the figure of merit
-of an application at runtime. Equation~\eqref{eq:progress-calculation} enables us to accurately measure progress while considering the time interval and the number of heartbeats received. It also allows us to limit the heartbeat-rate of instrumentation to avoid overflowing our infrastructure with messages, since  it is sufficient to accumulate a 
+of an application at runtime. Equation~\eqref{ch4:eq:progress-calculation} enables us to accurately measure progress while considering the time interval and the number of heartbeats received. It also allows us to limit the heartbeat-rate of instrumentation to avoid overflowing our infrastructure with messages, since  it is sufficient to accumulate a 
 heartbeat counter on the application side and to only periodically send this
 counter to our data collection and control infrastructure. 
 
-\subsection{Training the RL Agent using Offline Collected Dataset}\label{sec:training}
+\subsection{Training the RL Agent using Offline Collected Dataset}\label{ch4:sec:training}
 % Akhilesh, I added the above subsection with specific heading to convey what is in these
 % below paras.
 The resulting collected dataset consists of quadruples of state, action, next state, and reward, corresponding to different benchmarks (training/testing). 
@@ -69,14 +69,14 @@ The resulting collected dataset consists of quadruples of state, action, next st
 %The action space is a discretization of the range of power caps supported by the hardware, in this case the TDP value of Intel processor we use for our experiments results in 16 $PCAP$ for the RAPL actuators.
 %%%%%%%%%%%%
 
-Our objective, as defined in Section~\ref{sec:Problem}, is to identify the maximum efficiency point ($\max{PPW}$) of operation for the application on a compute node, which will be represented by a suitable reward function. The reward function in RL helps the agent learn a policy that aligns with the optimization goal. In our case, the reward should be a function of application progress and power consumption, which together constitute $PPW$ (performance per watt). The reward function $r(t)$ is thus defined as
+Our objective, as defined in Section~\ref{ch4:sec:Problem}, is to identify the maximum efficiency point ($\max{PPW}$) of operation for the application on a compute node, which will be represented by a suitable reward function. The reward function in RL helps the agent learn a policy that aligns with the optimization goal. In our case, the reward should be a function of application progress and power consumption, which together constitute $PPW$ (performance per watt). The reward function $r(t)$ is thus defined as
 %\vspace{-0.2cm}
 \begin{equation}
 \begin{aligned}
 reward(t+1) = \frac{progress^3(t+1)}{P_{avg}(t+1)+1e^{-3}},
 % reward(t+1) = \frac{progress(t+1)}{\frac{PCAP(t)^2}{power(t+1)}+power(t+1)},
 \end{aligned}
-\label{eq:reward_function}
+\label{ch4:eq:reward_function}
 \end{equation}
 %
 where the reward is an explicit function of $progress(t+1)$ and $P_{avg}(t+1)$ representing the progress and measured power, respectively. A small constant (0.001) is added to the denominator to avoid division by 0. The rest of the notations follow the earlier definitions. The overall structure of the reward function is designed to maximize the reward for improved progress while penalizing high actual power consumption. The $progress(t+1)$ term cubed in the numerator shows that more progress leads to a higher reward. 
@@ -89,7 +89,7 @@ We note that in CQL the reward is part of the dataset and can be calculated befo
 The state variables include characteristics that provide insights into potential bottlenecks occurring during the application runtime. The reward function determines the efficiency or quality of $PCAP$ deployed to achieve the measured state. 
 % Therefore, training the RL agent allows it to learn a high-reward policy by observing the state $s(t)$ and resulting state $s(t+1)$. 
 
-% As pointed out in Section~\ref{sec:Background}, the CQL agent cannot extrapolate the action space. Therefore it is important to populate the dataset with actions sampled from the allowed action space. An ideal way to do so is by generating random action samples spanning the allowed $PCAP$ range.
+% As pointed out in Section~\ref{ch4:sec:Background}, the CQL agent cannot extrapolate the action space. Therefore it is important to populate the dataset with actions sampled from the allowed action space. An ideal way to do so is by generating random action samples spanning the allowed $PCAP$ range.
 
 
 % We also ensure that the dataset consists of data sampled while providing $PCAP$ generated using good policies, from which the CQL agent can learn the optimal policy. This means that the dataset should contain samples consisting of actions that we consider optimal. An ideal way to attain this is by generating random action samples spanning the allowed $PCAP$ range. We obtain this data from our prior experience executing these applications on Intel nodes under controlled $PCAP$ settings.
@@ -99,7 +99,7 @@ Consistent with the offline RL setting described in Section~III, we populate the
 of CQL converges.
 % - Equation~\eqref{eq:CQL}, converges.
 
-% We use CQL for training the offline RL agent, which has the advantage of optimizing over the distributional shift, as detailed in Section~\ref{sec:Background}. The RL agent is defined by using a single Q-network, where the input size is equivalent to the state dimension and the output size corresponds to the cardinality of the action space. During training, the agent samples random batches of data from the dataset to train the agent. The Q-network weights are then updated to learn the action policy that returns the maximum reward from that batch of data. These iterations continue until convergence of the loss function given in Equation~\ref{eq:CQL}. 
+% We use CQL for training the offline RL agent, which has the advantage of optimizing over the distributional shift, as detailed in Section~\ref{ch4:sec:Background}. The RL agent is defined by using a single Q-network, where the input size is equivalent to the state dimension and the output size corresponds to the cardinality of the action space. During training, the agent samples random batches of data from the dataset to train the agent. The Q-network weights are then updated to learn the action policy that returns the maximum reward from that batch of data. These iterations continue until convergence of the loss function given in Equation~\ref{eq:CQL}. 
 % The random batches sampled across iterations ensure the full utilization of dataset towards reinforcement learning.
 
 
@@ -114,9 +114,9 @@ of CQL converges.
 % Akhilesh, gave this heading to this subsection
 \subsection{RL Model Evaluation}\label{sec:model_eval}
 We evaluate the trained model by running it alongside test applications that the training phase has not encountered before, as well as some applications with phases (to evaluate adaptability). During evaluation, the Q-network computes the action $Q$-values corresponding to the observed state provided by the daemon process and takes the greedy action, that is, $PCAP = \arg\max_a(Q(s, a))$. This $PCAP$ is deployed by using the $RAPL$ actuators and is maintained at a steady throughput throughout the sampling interval. The sampling interval plays an important role in determining the adaptability of the controller during actuation. In our experiments we have intentionally kept the sampling interval smaller to detect minute changes in performance.
-% The controller performs the informed decision making by observing the state variables thereby bringing down the overall power consumption by avoiding wastage as detailed in the section \ref{sec:Related}.
+% The controller performs the informed decision making by observing the state variables thereby bringing down the overall power consumption by avoiding wastage as detailed in the section \ref{ch4:sec:Related}.
 
-% In our case the $progress(t)$ defined in Section \ref{subsec:Performance_Measurement} depicts the state of the system at time $t$. We randomly sample action $a(t)$ from the action space $\mathcal{A}$ and observe the changes it brings to the state $progress(t)$. Following that we record the next state, $progress(t+1)$ and also calculate the reward function $r(t+1)$ at the same time.
+% In our case the $progress(t)$ defined in Section \ref{ch4:subsec:Performance_Measurement} depicts the state of the system at time $t$. We randomly sample action $a(t)$ from the action space $\mathcal{A}$ and observe the changes it brings to the state $progress(t)$. Following that we record the next state, $progress(t+1)$ and also calculate the reward function $r(t+1)$ at the same time.
 
 % We use fitted Q-learning for training our agent, where data points are randomly sampled from the dataset to train the actor network. This method works best for a finite set of state action pairs. Therefore in this paper, we use a finite set of discrete actions, $\mathcal{A}$ from which the random actions are sampled to generate the dataset. The actor network is trained during each iteration of the learning phase, with a finite set of data, sampled randomly from this dataset.
 
@@ -331,14 +331,14 @@ Provisioning of these nodes included a fully installed and configured Global Ext
 
 \subsection{Compute-intensive Workloads used in Offline RL Model Training}
 
-We use a collection of well-established application benchmarks to represent the behaviors of various applications and their response to power capping. Table \ref{tab:performance_metrics} presents the characteristics of various benchmarks used throughout this paper, including problem size, iterations, average $IPC$, average $CMR$, average $STL$, average progress, and average execution time ($ET$) for each kernel, calculated over 10 independent runs. The benchmarks
+We use a collection of well-established application benchmarks to represent the behaviors of various applications and their response to power capping. Table \ref{ch4:tab:performance_metrics} presents the characteristics of various benchmarks used throughout this paper, including problem size, iterations, average $IPC$, average $CMR$, average $STL$, average progress, and average execution time ($ET$) for each kernel, calculated over 10 independent runs. The benchmarks
 listed here are used both for training and for validating our control agent, with some of them being kept out of our training dataset and used  only for validation. By using these well-established benchmarks, we hope to train our model to recognize and predict optimal power management strategies that will be applicable to a wide range of application behaviors.
 
 % moved here so it appears in the right place
 \begin{table*}[htb]
     \centering
     \caption{{Detailed description of our benchmarks, including their type, parameters, and average performance metrics (uncapped).}}
-    \label{tab:performance_metrics}
+    \label{ch4:tab:performance_metrics}
     \resizebox{\linewidth}{!}{%
         \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
             \hline
@@ -423,10 +423,10 @@ Our implementation is based on the NPB-3.4-OpenMP version.
 % The $IPC$, $STL$, and $CMR$ values collectively constitute a distinctive vector, serving as a "fingerprint" of the application given the specific $PCAP$. Notably, the relation of performance counter metrics to $PCAP$ differs from the application's "progress" as seen in Figure \ref{fig:motivation_fig}.
 % This observation underscores the insights of Ramesh et al. \cite{ramesh2019understanding}, highlighting the significance of measuring application progress towards achieving scientific objectives.
 We modified these benchmarks to be iterative so that application progress is more easily identifiable: When not already a part of the benchmark, an outer loop is introduced, repeating their kernels a configurable amount of time. Each outer loop also contains our instrumentation for heartbeats, resulting in each  benchmark reporting one heartbeat per iteration. Note that the progress rate of each benchmark is different and depends on the runtime of its kernel.
-% Table \ref{tab:performance_metrics} shows the names and associated characteristics of the applications we consider in this paper for a quick reference. 
+% Table \ref{ch4:tab:performance_metrics} shows the names and associated characteristics of the applications we consider in this paper for a quick reference. 
 
 Since this paper is concerned with demonstrating energy efficiency, we select each benchmark problem size to be bigger than caches, with the goal of exhibiting performance trade-offs between CPU power capping (and the resulting frequency variation) and stable memory performance.
-These problem size values are provided in Table~\ref{tab:performance_metrics}. The table also provides information on the arithmetic intensity for each application, defined as the ratio between total computational operations  and total instructions, which serves as a measure of computational diversity among the applications. A double line  in the table separates applications that are part of the training dataset (top) and those used only during validation (bottom).
+These problem size values are provided in Table~\ref{ch4:tab:performance_metrics}. The table also provides information on the arithmetic intensity for each application, defined as the ratio between total computational operations  and total instructions, which serves as a measure of computational diversity among the applications. A double line  in the table separates applications that are part of the training dataset (top) and those used only during validation (bottom).
 
 \subsection{Data Collection and Offline Training}
 
@@ -438,9 +438,9 @@ To address this, we employ a weighted sampling strategy based on a Gaussian-shap
 To ensure that the training dataset fits the conditions under which the trained controller will operate, we set up the experiments  to sample at the same rate as the control will activate: 1 Hz (once per second). In this paper we use a random control policy during data collection: $PCAP$ values for RAPL, chosen randomly from a discretization of the action space of allowed power caps for the system. Indeed, while the system allows for a power capping range of 78 \unit{\watt} to 165 \unit{\watt}, we apply only 16 values distributed uniformly in that range. By reducing the action state to such a small and finite set of actions, we avoid the need for a much larger Q-Network (in the output dimension)
 to train. This choice also significantly reduces the size of the  training dataset while preserving the controller’s performance. We ensure in our data collection that all 16 possible power caps are sampled, since CQL, like most RL algorithms, does not extrapolate on the action space observed. Nevertheless, not all transitions between two actions corresponding to all state observations are present in the dataset. 
 
-This collection strategy is repeated for each of the benchmarks selected as part of the training set for the problem size and iterations given in  Table \ref{tab:performance_metrics}. To ensure an independent and identically distributed (i.i.d.) dataset across applications, we execute applications with lower average execution times more frequently than others. Rewards are computed from these state vectors and appended to the dataset and normalized as explained in Section~\ref{sec:Methodology}.
+This collection strategy is repeated for each of the benchmarks selected as part of the training set for the problem size and iterations given in  Table \ref{ch4:tab:performance_metrics}. To ensure an independent and identically distributed (i.i.d.) dataset across applications, we execute applications with lower average execution times more frequently than others. Rewards are computed from these state vectors and appended to the dataset and normalized as explained in Section~\ref{ch4:sec:Methodology}.
 
-% The action space consists of a set of finite actions allowed by the Global Extensible Open Power Manager (GEOPM) \cite{eastep2017global}, which is a software framework to explore power and energy optimizations on platforms with heterogeneous mixes of computing hardware. Our motive, as defined in Section \ref{sec:Introduction}, being identifying the maximum efficiency point of operation for the application on an HPC node, will be represented by the reward function as a function of the application progress and power consumption.
+% The action space consists of a set of finite actions allowed by the Global Extensible Open Power Manager (GEOPM) \cite{eastep2017global}, which is a software framework to explore power and energy optimizations on platforms with heterogeneous mixes of computing hardware. Our motive, as defined in Section \ref{ch4:sec:Introduction}, being identifying the maximum efficiency point of operation for the application on an HPC node, will be represented by the reward function as a function of the application progress and power consumption.
 In our case the state variable at time  $t$, $s(t)$ consists of the progress of the system, the measured power (the measure of how much of the supplied power is being utilized) and the characteristics of the application. 
 
 \begin{equation*}

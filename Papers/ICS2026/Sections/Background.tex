@@ -3,7 +3,7 @@
 \subsection{Offline Preference-Driven Multi-Objective Reinforcement Learning}
 \label{sec:PDMORL}
 
-Many real-world control problems, including energy-aware scheduling and power-performance management in HPC systems, naturally involve multiple conflicting objectives. We discussed some of these in Section~\ref{sec:Introduction}. Multi-objective reinforcement learning (MORL) formulates such problems by extending the scalar reward in standard RL to a vector-valued reward, enabling explicit reasoning over trade-offs between objectives such as performance and energy consumption.
+Many real-world control problems, including energy-aware scheduling and power-performance management in HPC systems, naturally involve multiple conflicting objectives. We discussed some of these in Section~\ref{ch5:sec:Introduction}. Multi-objective reinforcement learning (MORL) formulates such problems by extending the scalar reward in standard RL to a vector-valued reward, enabling explicit reasoning over trade-offs between objectives such as performance and energy consumption.
 
 Formally, a multi-objective Markov decision process (MOMDP) is defined as
 \begin{equation}
@@ -78,10 +78,10 @@ Rather than asking users to specify a preference vector $\boldsymbol{\omega}$ an
 $\boldsymbol{\omega}$ that is analytically aligned to the corresponding operating point on the Pareto front. The alignment exploits a domain-specific property of HPC workloads: for a fixed application, instantaneous progress is approximately monotonic with respect to the enforced power cap (PCAP). This monotonic relationship is directly observable in the training dataset and can be captured by a lightweight application-specific model, eliminating the need for an episodically updated data-driven 
 interpolator entirely.
 
-This modification not only resolves the preference alignment problem in a principled way, but also makes the controller directly interpretable to HPC users. The full formulation of this decay-driven preference construction and its integration into the offline Q-learning framework is described in Section~\ref{sec:Problem}.
+This modification not only resolves the preference alignment problem in a principled way, but also makes the controller directly interpretable to HPC users. The full formulation of this decay-driven preference construction and its integration into the offline Q-learning framework is described in Section~\ref{ch5:sec:Problem}.
 
 \subsection{Application-Aware Performance Measurement}
-\label{subsec:Performance_Measurement}
+\label{ch5:subsec:Performance_Measurement}
 
 We augment our monitoring of application behavior by adding a 
 notion of \textit{progress}, or \textit{heartbeats}, to our 
@@ -104,7 +104,7 @@ progress(t_i) = \underset{\forall k,\, t_k \in
 [t_{i-1},t_i]}{\text{median}}\bigg(\frac{N}{t_k - t_{k-1}} 
 \bigg),
 \end{aligned}
-\label{eq:progress-calculation}
+\label{ch5:eq:progress-calculation}
 \end{equation}
 where $N$ is the number of heartbeats received between time 
 instants $t_k$ and $t_{k-1}$. This measure serves as a 
@@ -127,7 +127,7 @@ input to the preference alignment mechanism of DDMORL.
 
 \subsection{Measuring Application Performance through Hardware 
 Performance Counters}
-\label{subsec:Applications_vs_perf}
+\label{ch5:subsec:Applications_vs_perf}
 
 Applications vary significantly in their performance on a given 
 hardware architecture, depending on characteristics such as 
@@ -204,7 +204,7 @@ ensures the test set represents genuinely unseen system
 dynamics, providing a more realistic assessment of deployment 
 performance.
 
-Table~\ref{tab:performance_metrics} summarizes the full 
+Table~\ref{ch5:tab:performance_metrics} summarizes the full 
 benchmark set. The eight benchmarks above the double line 
 constitute the training set, comprising five STREAM 
 memory-bandwidth variants (Scale, Triad, Add, Copy, and Full) 
@@ -225,7 +225,7 @@ improves generalization to the OOD test benchmarks.
     (uncapped). Benchmarks above the double line form the 
     training set; those below form the out-of-distribution 
     test set.}
-    \label{tab:performance_metrics}
+    \label{ch5:tab:performance_metrics}
     \resizebox{\linewidth}{!}{%
         \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
             \hline
